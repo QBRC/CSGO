@@ -13,6 +13,13 @@ def test_csgo_init_with_gpu():
   assert cell_seg_go.device == 0
 
 @pytest.fixture
+def csgo_no_gpu():
+  'create fixture to test multiple mpp conversion scenarios'
+  cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
+  return cell_seg_go
+
+
+@pytest.fixture
 def csgo_for_mpp_check():
   'create fixture to test multiple mpp conversion scenarios'
   cell_seg_go = CSGO(zoom=40, mpp=0.25)
@@ -27,6 +34,14 @@ def test_resolution_mpp_convertion(csgo_for_mpp_check):
   new_mpp = csgo_for_mpp_check.convert_resolution_to_mpp(60)
   expected_mpp = 0.25 / (60/40)
   assert new_mpp == pytest.approx(expected_mpp)
+
+
+# def test_yolo_init(csgo_no_gpu):
+  # 'test if yolo can be run'
+  # img_path = '../for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
+  # args = csgo_no_gpu.run_yolo(img_path, mpp=0.25)
+
+
 
 
   

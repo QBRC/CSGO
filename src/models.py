@@ -1,3 +1,6 @@
+from hd_yolo import yolo_standalone
+import argparse
+
 class CSGO():
   def __init__(self, gpu=False, save=False, zoom=40, mpp=0.25):
     """
@@ -15,7 +18,7 @@ class CSGO():
     self.zoom = zoom
     self.mpp = mpp
 
-  def convert_resolution_to_mpp(self, img_resolution):
+  def convert_resolution_to_mpp(self, img_resolution=40):
     """
     Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). Calculation based on previously defined zoom&mpp during class init.
     e.g.: if 40x corresponds to 0.25 MPP, then 20x corresponds to 0.5 MPP
@@ -24,10 +27,25 @@ class CSGO():
     new_mpp = self.mpp / factor_from_defined_zoom
     return new_mpp
     
+  def run_yolo(self, img_path, mpp):
+    yolo = yolo_standalone(img_path, self.device, mpp)
+    args_yolo = yolo.args_init()
 
-  def segment(self, img_path, cell_size = 50, img_resolution=20):
+    return args_yolo
+
+
+  def segment(self, img_path, cell_size = 50, img_resolution=40):
     # TODO: cell seg magic
+    mpp = self.convert_resolution_to_mpp(img_resolution)
+    yolo = self.run_yolo(img_path, mpp)
+
     return 0
 
       
+def main():
+    cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
+    cell_seg_go.segment('test_path')
+
+if __name__ == '__main__':
+  main()
     
