@@ -241,7 +241,70 @@ class Conv2dBNReLU(ConvBNReLU):
                          padding, dilation, groups, bias=bias)
         super(Conv2dBNReLU, self).__init__(conv, norm_layer, activation, dropout_rate)
 
-
+class IoU(nn.Module):
+    def __init__(self, mode='iou', axis=1, eps=0.):
+        """ Return a matrix of [batch * num_classes]. 
+            Note: In order to separate from iou=0, function WILL return NaN if both 
+            y_true and y_pred are 0. Need further treatment to remove nan in either 
+            loss function or matrix.
+        """
+        super(IoU, self).__init__()
+        assert mode in ['iou', 'dice']
+        self.factor = {'iou': -1.0, 'dice': 0.0}[mode]
+        self.eps = eps
+        self.axis = axis
+    
+    def forward(self, y_pred, y_true):
+        assert y_pred.shape == y_true.shape
+        sum_axis = list(range(1, self.axis)) + list(range(self.axis+1, y_pred.ndim))
+        
+        prod = (y_true * y_pred).sum(sum_axis)
+        plus = (y_true + y_pred).sum(sum_axis)
+        
+        ## We keep nan for 0/0 in order to correctly apply weight
+        iou = (2 + self.factor) * prod / (plus + self.factor * prod + self.eps)
+        
+        return iou
+    
+class SoftDiceLoss(IoU):
+    def __init__(self, weight=None, ignore_index=[], reduction='mean',
+                 mode='dice', axis=1, eps=0., use_positive=False):
+        super(SoftDiceLoss, self).__init__(mode, axis, eps)
+        self.ignore_index = ignore_index
+        self.register_buffer('weight', weight)
+        self.use_positive = use_positive
+        self.reduction = {
+            'none': lambda x: x,
+            'mean': torch.mean,
+            'sum': torch.sum,
+        }[reduction]
+    
+    def _apply_weight(self, x):
+        """ Apply class_weights to calculate loss, ignore nan. """        
+        if self.weight is None:
+            weight = torch.ones(x.shape[-1], device=x.device)
+        else:
+            weight = self.weight
+        
+        ## remove ignore_index
+        idx = np.ones(x.shape[-1], dtype=bool)
+        idx[self.ignore_index] = False
+        x, weight = x[:,idx], weight[idx]
+        
+        ## apply weight
+        weight = ~torch.isnan(x) * weight
+        return x * weight / weight.sum(-1, keepdim=True)
+    
+    def forward(self, y_pred, y_true):
+        ## y_pred is softmax cannot be 0, so no nan in res
+        iou = super(SoftDiceLoss, self).forward(y_pred, y_true)
+        # iou = torch.where(torch.isnan(iou), torch.zeros_like(iou), iou)
+        iou = self._apply_weight(iou)
+        # print(["apply_weights", res])
+        res = -self.reduction(iou.sum(-1))
+        
+        return (res + 1) if self.use_positive else res
+############ helper functions below #############
 def get_norm_layer_and_bias(norm_layer='batch', use_bias=None):
     """ Return a normalization layer and set up use_bias for convoluation layers.
     
@@ -280,3 +343,5 @@ def get_norm_layer_and_bias(norm_layer='batch', use_bias=None):
         use_bias = norm_layer == nn.InstanceNorm2d
     
     return norm_layer, use_bias
+
+
