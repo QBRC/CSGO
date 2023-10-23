@@ -1,5 +1,6 @@
 from hd_yolo import yolo_standalone
 import argparse
+import torch
 
 class CSGO():
   def __init__(self, gpu=False, save=False, zoom=40, mpp=0.25):
@@ -10,10 +11,10 @@ class CSGO():
     standard equipment places 40x images at MPP = 0.25
     """
     if gpu:
-      # TODO: define device
-      self.device = 0
+      # TODO: re-define device
+      self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     else:
-      self.device = None
+      self.device = torch.device('cpu')
     self.save = save
     self.zoom = zoom
     self.mpp = mpp
@@ -30,6 +31,7 @@ class CSGO():
   def run_yolo(self, img_path, mpp):
     yolo = yolo_standalone(img_path, self.device, mpp)
     args_yolo = yolo.args_init()
+    nuclei_pred, patch = yolo.run_inference()
 
     return args_yolo
 
@@ -44,7 +46,7 @@ class CSGO():
       
 def main():
     cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
-    cell_seg_go.segment('test_path')
+    cell_seg_go.segment('for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png')
 
 if __name__ == '__main__':
   main()

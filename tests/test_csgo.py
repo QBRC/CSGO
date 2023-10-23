@@ -5,12 +5,12 @@ import pytest
 from models import CSGO
 
 def test_csgo_init_no_gpu():
-  cell_seg_go = CSGO()
-  assert cell_seg_go.device == None
+  cell_seg_go = CSGO() # GPU false by default
+  assert cell_seg_go.device.type == 'cpu'
 
 def test_csgo_init_with_gpu():
   cell_seg_go = CSGO(gpu=True)
-  assert cell_seg_go.device == 0
+  assert cell_seg_go.device.type == 'cuda'
 
 @pytest.fixture
 def csgo_no_gpu():

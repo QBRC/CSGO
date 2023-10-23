@@ -65,12 +65,11 @@ def overlay_masks_on_image(image, mask):
     return blended
 
 
-def main(args):
+def main(args, device):
     if args.model in CONFIGS.MODEL_PATHS:
         args.model = CONFIGS.MODEL_PATHS[args.model]
     print("==============================")
     model = load_hdyolo_model(args.model, nms_params=CONFIGS.NMS_PARAMS)
-    device = torch.device(args.device)
     
     if device.type == 'cpu':  # half precision only supported on CUDA
         model.float()

@@ -1,9 +1,10 @@
 from hd_yolo import yolo_standalone
 import numpy as np
+import torch
 
 
 IMG_PATH = './src/for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
-DEVICE = 0
+DEVICE = torch.device('cpu')
 
 
 def test_yolo_init():
@@ -18,7 +19,7 @@ def test_yolo_init():
   # check some class attributes
   class_args = yolo.args_yolo
   assert class_args.mpp == 0.25
-  assert class_args.device == DEVICE 
+  assert class_args.device.type == 'cpu' 
   
 
 def test_yolo_inference():
