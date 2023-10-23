@@ -1615,7 +1615,7 @@ class Mask(object):
             return self.poly()
         elif mode.startswith('mask'):
             return self.mask(dtype)
-        elif model.startswith('rle'):
+        elif mode.startswith('rle'):
             return self.rle()
         else:
             raise ValueError(f"{mode} is not supported.")
@@ -1705,7 +1705,7 @@ class Mask(object):
         elif self.mode.startswith('rle'):
             return len(self.m) > 0
         elif self.mode.startswith('mask'):
-            return m.sum() > 0
+            return self.m.sum() > 0
 
 
 class Box(object):
@@ -1782,7 +1782,7 @@ def decode_annotations(annotations, height=None, width=None, dtype='uint8'):
         code will prioritize 'height', 'width' coded in annotations.
         If the above slots are not provided, the default height, width will be used.
     """
-    mask_utils
+    from pycocotools import mask as mask_utils
     masks, labels, bboxes = [], [], []
     for obj in annotations:
         h = obj['height'] if 'height' in obj else height
@@ -3120,16 +3120,6 @@ class Dicom(object):
 ##################################################################################
 ##################################################################################
 ## The following functions haven't been well organized or maybe deprected
-def plot_watershed(image=None, markers=None, gradients=None, labels=None):
-    if image is not None:
-        image = skimage.exposure.rescale_intensity(image, out_range=(0, 1))
-    images = [image, markers, gradients, labels]
-    titles = ["Grayscale Image", "Markers", "Gradients", "Watershed Labels"]
-    cmaps = [plt.cm.gray, plt.cm.nipy_spectral,
-             plt.cm.nipy_spectral, plt.cm.nipy_spectral]
-    plot_images(images=images, titles=titles,
-                cmaps=cmaps, interpolation='nearest')
-
 
 def rescale_intensity_with_deconv(x, out_range=(0, 1), **kwargs):
     if x.ndim < 3:
@@ -3146,6 +3136,7 @@ def rescale_intensity_with_deconv(x, out_range=(0, 1), **kwargs):
 
 
 def product_transform_pars(args):
+    import itertools
     key_map = dict(rotation='theta', height_shift='tx', width_shift='ty',
                    shear='shear', width_zoom='zx', height_zoom='zy',
                    horizontal_flip='horizontal_flip',
@@ -3166,41 +3157,3 @@ def product_transform_pars(args):
 
     return pars
 
-def random_sampling_in_convex_polygons(polygons, N, plot=False):
-    """ Randomly sampling points in CONVEX polygons. 
-        Just a record for an old code. See the new scripts in use.
-    Sample code:
-        polygon_1 = np.array([[22, 2], [0, 1], [2, 16], [11, 18], 
-                             [12, 15], [8, 12], [10, 4], [20, 6], [22, 2]])
-        polygon_2 = 30 - polygon_1
-        res_1 = random_sampling_in_polygons([polygon_1], N=500, plot=True)
-        res_2 = random_sampling_in_polygons([polygon_2, polygon_1], N=500, plot=True)
-    """
-    ## assign task for each polygons based on area
-    areas = np.array(polygon_areas(polygons))
-    indices = np.random.choice(len(polygons), size=N, p=areas/np.sum(areas))
-    
-    res = []
-    for i, count in Counter(indices).items():
-        poly = polygons[i]
-        points = np.random.dirichlet(np.ones((len(poly),)), size=count)
-        res.append(np.dot(points, poly))
-    res = np.vstack(res)
-    
-    if plot:
-        from matplotlib.patches import Polygon
-        from matplotlib.collections import PatchCollection
-        ## ploting
-        patches = [Polygon(_) for _ in polygons]
-        patch_colors = np.array(100*np.random.rand(len(patches)))
-        point_colors = patch_colors[np.sort(indices)]
-
-        fig, ax = plt.subplots()
-        pc = PatchCollection(patches, alpha=0.4)
-        pc.set_array(patch_colors)
-        # patches = [Polygon(polygons)]
-        ax.add_collection(pc)
-        ax.scatter(res[:,0], res[:,1], s=10/np.log(N), c=point_colors, alpha=0.5)
-        plt.show()
-    
-    return res
