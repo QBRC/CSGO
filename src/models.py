@@ -1,6 +1,9 @@
 from hd_yolo import yolo_standalone
 import argparse
 import torch
+from skimage.measure import label
+
+# import matplotlib.pyplot as plt
 
 class CSGO():
   def __init__(self, gpu=False, save=False, zoom=40, mpp=0.25):
@@ -33,13 +36,20 @@ class CSGO():
     args_yolo = yolo.args_init()
     nuclei_pred, patch = yolo.run_inference()
 
-    return args_yolo
+    return nuclei_pred, patch
+
 
 
   def segment(self, img_path, cell_size = 50, img_resolution=40):
     # TODO: cell seg magic
     mpp = self.convert_resolution_to_mpp(img_resolution)
-    yolo = self.run_yolo(img_path, mpp)
+    nuclei_pred, patch = self.run_yolo(img_path, mpp)
+
+    # only want the alpha layer
+    nuclei_alpha_layer = nuclei_pred[:,:,3].copy()
+    
+    # label each predicted nucleus with distinct numbering
+    nuclei_mask = label(nuclei_alpha_layer, background=0)
 
     return 0
 
@@ -47,6 +57,8 @@ class CSGO():
 def main():
     cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
     cell_seg_go.segment('for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png')
+
+
 
 if __name__ == '__main__':
   main()
