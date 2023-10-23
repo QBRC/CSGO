@@ -1,2 +1,5 @@
 # ignore python compile files
 *.pyc
+
+# pretrained weights too large for upload
+pretrained_weights
