@@ -5,6 +5,9 @@ from hd_wsi import run_patch_inference
 from run_patch_inference import main
 import argparse
 
+import os
+SRC_DIR = os.getcwd()
+
 class yolo_standalone():
   def __init__(self, img_path, device, mpp):
     self.img_path = img_path
@@ -16,11 +19,17 @@ class yolo_standalone():
     args_yolo.data_path = self.img_path
     args_yolo.output_dir = './'
     args_yolo.device = self.device 
-    args_yolo.model = '/project/DPDS/Xiao_lab/shared/deep_learning_SW_RR/cell_segmentation/watershed/hd_wsi_models/lung_best.float16.torchscript.pt'
-    args_yolo.meta_info = './hd_wsi/meta_info.yaml'
+    args_yolo.model = os.path.join(SRC_DIR, 'src/for_dev_only/pretrained_weights/lung_best.float16.torchscript.pt')
+    args_yolo.meta_info = os.path.join(SRC_DIR, 'src/hd_wsi/meta_info.yaml')
     args_yolo.mpp = self.mpp
     args_yolo.box_only = False
     args_yolo.export_text = False
 
+    self.args_yolo = args_yolo
+
     return args_yolo
 
+  def run_inference(self):
+    # 0 is the background (non-nuclei) pixel value 
+    nuclei_pred, patch = run_patch_inference.main(self.args_yolo)
+    return nuclei_pred, patch
