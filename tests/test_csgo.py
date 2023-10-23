@@ -10,6 +10,9 @@ def test_csgo_init_no_gpu():
 
 def test_csgo_init_with_gpu():
   cell_seg_go = CSGO(gpu=True)
+  if cell_seg_go.device.type != 'cuda':
+    pytest.skip("Indicated GPU use, but no GPU found")
+
   assert cell_seg_go.device.type == 'cuda'
 
 @pytest.fixture

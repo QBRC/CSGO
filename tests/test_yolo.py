@@ -1,7 +1,11 @@
 from hd_yolo import yolo_standalone
 import numpy as np
 import torch
+import os
+import pytest
 
+import logging
+log = logging.getLogger(__name__)
 
 IMG_PATH = './src/for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
 DEVICE = torch.device('cpu')
@@ -26,8 +30,15 @@ def test_yolo_inference():
   '''
   Test if HD-Yolo can produce the output as intended.
   '''
+
   yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25)
   args = yolo.args_init()
+
+  # on GitHub CI, skip since no model weights available
+  if not os.path.exists(args.model):
+    log.warning("No model weights found. Testing skipped but separate test should be conducted.")
+    pytest.skip('No model weights found.')
+    
   nuclei_pred, patch = yolo.run_inference()
   
   # check output types
