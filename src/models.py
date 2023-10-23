@@ -2,6 +2,7 @@ from hd_yolo import yolo_standalone
 import argparse
 import torch
 from skimage.measure import label
+from torch_models import UNet
 
 # import matplotlib.pyplot as plt
 
@@ -38,18 +39,24 @@ class CSGO():
 
     return nuclei_pred, patch
 
+  def membrane_detection(self, img_path, mpp):
+    model = UNet(1, scale_factor=1.0, resize_mode='bilinear')
 
+    return 0
 
   def segment(self, img_path, cell_size = 50, img_resolution=40):
-    # TODO: cell seg magic
+    ## Nuclei segmentation with HD-Yolo ##
     mpp = self.convert_resolution_to_mpp(img_resolution)
-    nuclei_pred, patch = self.run_yolo(img_path, mpp)
+    # nuclei_pred, patch = self.run_yolo(img_path, mpp)
 
-    # only want the alpha layer
-    nuclei_alpha_layer = nuclei_pred[:,:,3].copy()
+    # # only want the alpha layer
+    # nuclei_alpha_layer = nuclei_pred[:,:,3].copy()
     
-    # label each predicted nucleus with distinct numbering
-    nuclei_mask = label(nuclei_alpha_layer, background=0)
+    # # label each predicted nucleus with distinct numbering
+    # nuclei_mask = label(nuclei_alpha_layer, background=0)
+
+    ## Membrane segmentation 
+    self.membrane_detection(img_path, mpp)
 
     return 0
 
