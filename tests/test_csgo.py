@@ -40,7 +40,10 @@ def test_resolution_mpp_convertion(csgo_for_tests_shared):
   assert new_mpp == pytest.approx(expected_mpp)
 
 def test_unet_init(csgo_for_tests_shared):
-  csgo_for_tests_shared.unet_init()
+  try:
+    csgo_for_tests_shared.unet_init()
+  except FileNotFoundError: # specific to GitHub CI
+    pytest.skip('No weights uploaded to GitHub')
   
   model = csgo_for_tests_shared.model
   assert isinstance(model, UNet)
@@ -50,7 +53,10 @@ def test_unet_seg(csgo_for_tests_shared):
   Test if UNet is producing the expected outputs.
   This only tests the software portion (i.e. output sizes, values), visual inspection needs to be conducted seprately.
   '''
-  csgo_for_tests_shared.unet_init()
+  try:
+    csgo_for_tests_shared.unet_init()
+  except FileNotFoundError: # specific to GitHub CI
+    pytest.skip('No weights uploaded to GitHub')
 
   rand_img = np.random.uniform(low=0, high=255, size=(512, 512, 3))
   
