@@ -5,6 +5,8 @@ import pytest
 from models import CSGO
 from torch_models import UNet, SoftDiceLoss
 import numpy as np
+import os
+import skimage
 
 def test_csgo_init_no_gpu():
   cell_seg_go = CSGO() # GPU false by default
@@ -67,12 +69,14 @@ def test_unet_seg(csgo_for_tests_shared):
 
 
 def test_watershed(csgo_for_tests_shared):
-  return 0
-# def test_yolo_init(csgo_no_gpu):
-  # 'test if yolo can be run'
-  # img_path = '../for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
-  # args = csgo_no_gpu.run_yolo(img_path, mpp=0.25)
+  TEST_DIR = os.path.realpath(os.path.dirname(__file__))
+  nuclei_masks = skimage.io.imread(os.path.join(TEST_DIR, 'test_nuclei_masks.tiff'))
+  membrane_masks = skimage.io.imread(os.path.join(TEST_DIR, 'test_membrane_masks.tiff'))
 
+  cell_seg = csgo_for_tests_shared.watershed(nuclei_masks, membrane_masks, cell_size = 40)
+  
+  assert isinstance(cell_seg, np.ndarray)
+  assert cell_seg.shape == nuclei_masks.shape
 
 
 
