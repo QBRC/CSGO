@@ -262,16 +262,24 @@ class CSGO():
 
     # save the results
     if self.save:
-      #  print('nuclei_mask type', type(nuclei_mask))
-      #  # temperaily to save membrane and nuclei results
-      #  skimage.io.imsave('test_nuclei_masks.png', nuclei_mask)
+
+      # set color palette
       cmap_set3   = plt.get_cmap("Set3")  
       cmap_tab20c = plt.get_cmap("tab20c")  
       color_dict = [cmap_tab20c.colors[_] for _ in range(len(cmap_tab20c.colors))] + \
         [cmap_set3.colors[_] for _ in range(len(cmap_set3.colors))]
-      color_cell = label2rgb(res_cell_seg, colors=color_dict)
-      plt.imshow(color_cell)
-      plt.savefig('test_cell_seg.png', dpi=300)
+
+      # this output is for web app
+      fig, axs = plt.subplots(1,4, figsize=(18, 6))
+      axs[0].imshow(patch), axs[0].set_title('Uploaded H&E patch')
+      axs[1].imshow(label2rgb(nuclei_mask, colors=color_dict)), axs[1].set_title('Nuclei mask from HD-Yolo')
+      axs[2].imshow(membrane_mask), axs[2].set_title('Membrane mask from UNet')
+      axs[3].imshow(label2rgb(res_cell_seg, colors=color_dict)), axs[3].set_title('CSGO whole-cell segmentation')
+      plt.savefig('pipeline_view.png', dpi=300)
+
+      # this output is for user download
+      res_cell_seg = res_cell_seg.astype(np.uint8)
+      skimage.io.imsave('CSGO_whole_cell_seg.png', res_cell_seg)
 
     return res_cell_seg
 
