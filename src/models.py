@@ -6,7 +6,11 @@ from torch_models import UNet, SoftDiceLoss
 import os
 import numpy as np
 import skimage
-# import matplotlib.pyplot as plt
+from scipy import ndimage as ndi
+from scipy.spatial.distance import cdist
+from skimage.segmentation import watershed
+import matplotlib.pyplot as plt
+from skimage.color import label2rgb
 
 # find the path this file
 SRC_DIR = os.path.realpath(os.path.dirname(__file__))
@@ -149,6 +153,95 @@ class CSGO():
 
     return membrane_mask
 
+  def find_missed_nuclei(self, ndi_distance, nucleus_label, cell_size):
+      """
+      Given transformed distance from ndi, find the local minima and mark them as new nucleus
+      @param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()
+            nucleus_label: nucleus prediction results from HD-Staining
+            cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus
+                for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label
+      
+      @return nucleus_label: nucleus labels found by both HD-Staining and minimum local distances
+      """
+
+      # determines minimum separation
+      min_nucleus_distance = int(cell_size/2)
+      
+      # negative here to find the maximum
+      # ref: https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.peak_local_max
+      local_min = skimage.feature.peak_local_max(-ndi_distance, min_distance=min_nucleus_distance, exclude_border=False)
+
+      # preserve the shape as HD-Staining predicted nucleus
+      local_min_mask = np.zeros(nucleus_label.shape, dtype=bool)
+
+      # Set the elements corresponding to the coordinates in `local_min` to True
+      local_min_mask[local_min[:, 0], local_min[:, 1]] = True
+
+      # local_min_mask_dilated = skimage.morphology.binary_dilation(local_min_mask, skimage.morphology.disk(60))
+      local_min_mask_labeled = skimage.measure.label(local_min_mask)
+
+      artifical_nucleus_size = int(cell_size / 3)
+
+      for label in np.unique(local_min_mask_labeled):
+        if label == 0: continue # skip the background
+
+        # build individually labeled minima masks
+        ind_minima_labeled = local_min_mask_labeled == label
+
+        # calculate the Euclidean distance between each pixel in the image (i.e. HD-Staining nucelus prediction) and each pixel in the label
+        # label in this case only has True or False
+        distances = cdist(np.argwhere(nucleus_label), np.argwhere(ind_minima_labeled))
+
+        # the closest other nucleus is too far to be within the same cell
+        # distance between two local minima is not checked, as it was filtered in peak_local_max()
+        if np.min(distances) >= min_nucleus_distance:
+          # add to nuc_zero label as a new nuclei
+          # idea: average nucleus size in each predicted labels
+          ind_nuclei = skimage.morphology.binary_dilation(ind_minima_labeled, skimage.morphology.disk(artifical_nucleus_size))
+          nucleus_label[(nucleus_label == 0) & (ind_nuclei == 1)] = np.unique(nucleus_label)[-1] + 1 # mark the membrane as another color on "nucleus" labels
+
+      return nucleus_label
+  
+  def watershed(self, nuclei_mask, membrane_mask, cell_size):
+    """
+    performs watershed using predicted nucleus (HD-Yolo) and membranes (UNet).
+    """
+
+    # negative membrane for distrance transform
+    new_mm  = 1-membrane_mask/255
+
+    # picking a threshhold to create binary label
+    new_mm[new_mm > 0.5] = 1
+    new_mm[new_mm <= 0.5] = 0  
+
+    # fill possible small holes in predictions
+    # function always outputs boolean, therefore membrane predictions are first filled, then used to guide watershed 
+    # ref: https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.remove_small_holes
+    # new_mm = remove_small_holes(new_mm.astype(bool), area_threshold=100)
+
+    distance_mm=-ndi.distance_transform_edt(new_mm)
+
+    # in watershed, label=0 means the pixel (i.e. those that were not predicted as nucleus) is not a marker. Ref: https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.watershed
+    # transforming distance based on nucleus. Further away from membrane, the lower the water levels are --> nucleus = basin
+    distance_nuc=ndi.distance_transform_edt(nuclei_mask==0)  # nuclei masks have unique values. 0 indicates non-nuclei
+    
+    # combine membrane distance and nuclei distance
+    distance = distance_mm + distance_nuc/4
+
+    # find nuclei missed by HD-Yolo
+    nuc_zero = self.find_missed_nuclei(distance, nuclei_mask, cell_size)
+
+    # in watershed, label=0 means not the pixel is not a marker. Ref: https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.watershed
+    markers = nuc_zero.copy() 
+
+    # markers indicate where the basins are
+    # labels will follow the same order as markers, i.e. largest value in marker is the membrane, and that of in label will be membrane.
+    watershed_res = watershed(distance, markers=markers)
+
+    return watershed_res
+
+
+
   def segment(self, img_path, cell_size = 50, img_resolution=40):
     ## Nuclei segmentation with HD-Yolo ##
     patch_mpp = self.convert_resolution_to_mpp(img_resolution)
@@ -160,17 +253,47 @@ class CSGO():
     # label each predicted nucleus with distinct numbering
     nuclei_mask = label(nuclei_alpha_layer, background=0)
 
-    ## Membrane segmentation 
-    mm = self.membrane_detection(patch, patch_mpp)
-    
+    ## Membrane segmentation with Unet ##
+    membrane_mask = self.membrane_detection(patch, patch_mpp)
 
-    return 0
+    ## Watershed with nuclei and membrane detection ##
+    # raw segmentation result (i.e. each pixel assigned to a cell)
+    res_cell_seg = self.watershed(nuclei_mask, membrane_mask, cell_size)
+
+    # save the results
+    if self.save:
+      #  print('nuclei_mask type', type(nuclei_mask))
+      #  # temperaily to save membrane and nuclei results
+      #  skimage.io.imsave('test_nuclei_masks.png', nuclei_mask)
+      cmap_set3   = plt.get_cmap("Set3")  
+      cmap_tab20c = plt.get_cmap("tab20c")  
+      color_dict = [cmap_tab20c.colors[_] for _ in range(len(cmap_tab20c.colors))] + \
+        [cmap_set3.colors[_] for _ in range(len(cmap_set3.colors))]
+      color_cell = label2rgb(res_cell_seg, colors=color_dict)
+      plt.imshow(color_cell)
+      plt.savefig('test_cell_seg.png', dpi=300)
+
+    return res_cell_seg
+
+
+    
 
       
 def main():
-    cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
-    cell_seg_go.segment('for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png')
+    cell_seg_go = CSGO(gpu=False, save=True, zoom=40, mpp=0.25)
 
+    img_path = 'for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
+    cell_seg_go.segment(img_path, cell_size=40)
+
+    
+    # temp_unet_res_path = '/project/DPDS/Xiao_lab/shared/deep_learning_SW_RR/cell_segmentation/CSGO/src/test_unet_output.png'
+
+    # hello = skimage.io.imread(temp_unet_res_path)
+    # plt.imshow(hello)
+    # plt.savefig('dont_save_me.pdf', format='pdf', dpi=300)
+
+    # print(np.unique(hello))
+    # print(hello.shape)
 
 
 if __name__ == '__main__':

@@ -65,6 +65,9 @@ def test_unet_seg(csgo_for_tests_shared):
   max_check = membrane_pred <= 255
   assert np.all(min_check) and np.all(max_check)
 
+
+def test_watershed(csgo_for_tests_shared):
+  return 0
 # def test_yolo_init(csgo_no_gpu):
   # 'test if yolo can be run'
   # img_path = '../for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
