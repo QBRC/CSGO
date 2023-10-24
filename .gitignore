@@ -3,3 +3,6 @@
 
 # pretrained weights too large for upload
 pretrained_weights
+
+# code coverages
+tests/coverage
