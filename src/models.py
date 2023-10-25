@@ -53,6 +53,7 @@ class CSGO():
 
   def to_device(self, x, device):
     """ Move objects to device.
+        Option 2 and 3 not expected in this app.
         1). if x.to(device) is valid, directly call it.
         2). if x is a function, ignore it
         3). if x is a dict, list, tuple of objects.
@@ -60,16 +61,7 @@ class CSGO():
         Function makes a copy of all non-gpu objects of x. 
         It will skip objects already stored on gpu. 
     """
-    try:
-        return x.to(device)
-    except:
-        if not callable(x):
-            if isinstance(x, dict):
-                for k, v in x.items():
-                    x[k] = self.to_device(v, device)
-            else:
-                x = type(x)([self.to_device(v, device) for v in x])
-    return x
+    return x.to(device)
   
   def unet_init(self):
     '''
