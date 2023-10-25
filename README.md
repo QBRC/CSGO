@@ -29,12 +29,13 @@ mv /path/to/lung_best.float16.torchscript.pt src/pretrained_weights
 ```
 
 ## How to use CSGO in command line
-`src/run_csgo.sh` provides few examples on how you can run CSGO. The most straightforward way is to specify the patch location and the cell size:
+`src/run_csgo.sh` provides few examples on how you can run CSGO. The most straightforward way is to specify the patch location only:
 ```
-python models.py --data_path ${img_path} --cell_size ${cell_size}
+cd src/
+python models.py --data_path /path/to/your/image
 ```
 
-If your equipment has resolution of MPP=0.25 at 40x, but the patch itself is in a different resolution, you can specify the resolution by:
+If your equipment has resolution of MPP=0.25 at 40x, but the patch itself is in a different resolution, you can specify the resolution as well as the new cell size:
 ```
 python models.py --data_path ${img_path} --cell_size ${cell_size}  --resolution ${resolution}
 ```
