@@ -10,6 +10,7 @@ import skimage
 
 YOLO_PATH = './src/pretrained_weights/lung_best.float16.torchscript.pt'
 UNET_PATH = './src/pretrained_weights/epoch_190.pt'
+IMG_PATH = './example_patches/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
 
 
 def test_csgo_init_no_gpu():
@@ -76,6 +77,12 @@ def test_watershed(csgo_for_tests_shared):
   assert isinstance(cell_seg, np.ndarray)
   assert cell_seg.shape == nuclei_masks.shape
 
+def test_segmentation(csgo_for_tests_shared):
+  '''
+  light weight segmentation test. Visual inspection is needed.
+  '''
+  res = csgo_for_tests_shared.segment(IMG_PATH, cell_size=40)
+  assert isinstance(res, np.ndarray)
 
 
   
