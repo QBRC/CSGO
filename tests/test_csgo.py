@@ -81,8 +81,12 @@ def test_segmentation(csgo_for_tests_shared):
   '''
   light weight segmentation test. Visual inspection is needed.
   '''
-  res = csgo_for_tests_shared.segment(IMG_PATH, cell_size=40)
-  assert isinstance(res, np.ndarray)
+  try:
+    res = csgo_for_tests_shared.segment(IMG_PATH, cell_size=40)
+    assert isinstance(res, np.ndarray)
+    
+  except FileNotFoundError: # specific to GitHub CI
+    pytest.skip('No Yolo weights uploaded to GitHub')
 
 
   
