@@ -16,7 +16,7 @@ from skimage.color import label2rgb
 SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 
 class CSGO():
-  def __init__(self, gpu=False, save=False, zoom=40, mpp=0.25):
+  def __init__(self, yolo_path=None, unet_path=None, gpu=False, save=False, output_dir=None, zoom=40, mpp=0.25):
     """
     Define model level info.
     zoom: 1st data point to convert resolution and mpp
@@ -29,8 +29,11 @@ class CSGO():
     else:
       self.device = torch.device('cpu')
     self.save = save
+    self.output_dir = output_dir
     self.zoom = zoom
     self.mpp = mpp
+    self.yolo_path = yolo_path
+    self.unet_path = unet_path
 
   def convert_resolution_to_mpp(self, img_resolution=40):
     """
@@ -42,7 +45,7 @@ class CSGO():
     return new_mpp
     
   def run_yolo(self, img_path, mpp):
-    yolo = yolo_standalone(img_path, self.device, mpp)
+    yolo = yolo_standalone(img_path, self.device, mpp, self.yolo_path)
     args_yolo = yolo.args_init()
     nuclei_pred, patch = yolo.run_inference()
 
@@ -78,8 +81,7 @@ class CSGO():
     criterion = self.to_device(criterion, self.device)
     
     # load pretrained weights
-    weight_path = os.path.join(SRC_DIR, 'for_dev_only/pretrained_weights/epoch_190.pt')
-    model.load_state_dict(torch.load(weight_path, map_location=self.device))
+    model.load_state_dict(torch.load(self.unet_path, map_location=self.device))
 
     self.model = model
 
@@ -275,11 +277,11 @@ class CSGO():
       axs[1].imshow(label2rgb(nuclei_mask, colors=color_dict)), axs[1].set_title('Nuclei mask from HD-Yolo')
       axs[2].imshow(membrane_mask), axs[2].set_title('Membrane mask from UNet')
       axs[3].imshow(label2rgb(res_cell_seg, colors=color_dict)), axs[3].set_title('CSGO whole-cell segmentation')
-      plt.savefig('pipeline_view.png', dpi=300)
+      plt.savefig(os.path.join(self.output_dir, 'pipeline_view.png'), dpi=300)
 
       # this output is for user download
       res_cell_seg = res_cell_seg.astype(np.uint8)
-      skimage.io.imsave('CSGO_whole_cell_seg.png', res_cell_seg)
+      skimage.io.imsave(os.path.join(self.output_dir, 'CSGO_whole_cell_seg.png'), res_cell_seg)
 
     return res_cell_seg
 
@@ -288,20 +290,31 @@ class CSGO():
 
       
 def main():
-    cell_seg_go = CSGO(gpu=False, save=True, zoom=40, mpp=0.25)
-
-    img_path = 'for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
-    cell_seg_go.segment(img_path, cell_size=40)
-
+    parser = argparse.ArgumentParser('Whole-cell segmentation with CSGO.', add_help=True)
     
-    # temp_unet_res_path = '/project/DPDS/Xiao_lab/shared/deep_learning_SW_RR/cell_segmentation/CSGO/src/test_unet_output.png'
+    # app/model args
+    parser.add_argument('--data_path', required=True, type=str, help="Input data filename.")
+    parser.add_argument('--yolo_path', default='pretrained_weights/lung_best.float16.torchscript.pt', type=str, help="HD-Yolo model path, torch jit model." )
+    parser.add_argument('--unet_path', default='pretrained_weights/epoch_190.pt', type=str, help="UNet model path, torch jit model." )
+    parser.add_argument('--output_dir', default='patch_results', type=str, help="Output folder.")
+    parser.add_argument('--save', default=True, type=bool, help='Option to save the model outputs')
+    
+    # patch args
+    parser.add_argument('--gpu', default=False, type=bool, help='Boolean. Run on gpu if true else on cpu.')
+    parser.add_argument('--zoom_for_mpp', default=40, type=int, help='Zoom: 1st data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment specific.')
+    parser.add_argument('--mpp_for_zoom', default=0.25, type=float, help='MPP: 2nd data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment specific')
+    parser.add_argument('--resolution', default=40, type=float, help='Input patch resolutio.')
+    parser.add_argument('--cell_size', default=50, type=int, help='Default cell size (diameter), measured in pixels.')
+       
+    args = parser.parse_args()
 
-    # hello = skimage.io.imread(temp_unet_res_path)
-    # plt.imshow(hello)
-    # plt.savefig('dont_save_me.pdf', format='pdf', dpi=300)
+    # initialize
+    if not os.path.exists(args.output_dir):
+      os.makedirs(args.output_dir)
 
-    # print(np.unique(hello))
-    # print(hello.shape)
+    # perform segmentation and save
+    cell_seg_go = CSGO(yolo_path=args.yolo_path, unet_path=args.unet_path, gpu=args.gpu, save=args.save, output_dir=args.output_dir, zoom=args.zoom_for_mpp, mpp=args.mpp_for_zoom)
+    cell_seg_go.segment(args.data_path, args.cell_size, args.resolution)
 
 
 if __name__ == '__main__':
