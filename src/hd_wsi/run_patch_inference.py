@@ -68,34 +68,27 @@ def overlay_masks_on_image(image, mask):
 def main(args, device):
     if args.model in CONFIGS.MODEL_PATHS:
         args.model = CONFIGS.MODEL_PATHS[args.model]
-    print("==============================")
     model = load_hdyolo_model(args.model, nms_params=CONFIGS.NMS_PARAMS)
     
     if device.type == 'cpu':  # half precision only supported on CUDA
         model.float()
     model.eval()
     model.to(device)
-    print(f"Load model: {args.model} to {args.device} (nms: {model.headers.det.nms_params}")
 
     meta_info = load_cfg(args.meta_info)
     dataset_configs = {'mpp': CONFIGS.DEFAULT_MPP, **CONFIGS.DATASETS, **meta_info}
-    print(f"Dataset configs: {dataset_configs}")
 
     if os.path.isdir(args.data_path):
         patch_files = [os.path.join(args.data_path, _) for _ in os.listdir(args.data_path) 
                        if is_image_file(_)]
     else:
         patch_files = [args.data_path]
-    print(f"Inputs: {args.data_path} ({len(patch_files)} files observed). ")
 
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
-    print(f"Outputs: {args.output_dir}")
-    print("==============================")
 
     for patch_path in patch_files:
         print("==============================")
-        print(patch_path)
         image_id, ext = os.path.splitext(os.path.basename(patch_path))
         # run inference
         # img = read_image(patch_path).type(torch.float32) / 255
@@ -129,21 +122,6 @@ def main(args, device):
             alpha=1.0 if args.box_only else CONFIGS.MASK_ALPHA,
         )
 
-        # export overlayed images
-        # export_img = overlay_masks_on_image(raw_img, mask_img)
-
-        # export the mask only
-        # export_img = Image.fromarray(mask_img)
-        # img_file = os.path.join(args.output_dir, f"{image_id}_pred{ext}")
-        # export_img.save(img_file)
-        # Image.fromarray(mask_img).save(img_file)
-        # write_png((img_mask*255).type(torch.uint8), img_file)
-
-        # # save to csv
-        # if args.export_text and 'labels_text' in dataset_configs:
-        #     labels_text = dataset_configs['labels_text']
-        # else:
-        #     labels_text = None
         
         object_iterator = ObjectIterator(
             boxes=outputs['cell_stats']['boxes'], 
@@ -151,14 +129,7 @@ def main(args, device):
             scores=outputs['cell_stats']['scores'], 
             masks=param_masks,
         )
-        # df = export_detections_to_table(
-        #     object_iterator, 
-        #     labels_text=labels_text,
-        #     save_masks=not args.box_only,
-        # )
-        # csv_file = os.path.join(args.output_dir, f"{image_id}_pred.csv")
-        # df.to_csv(csv_file, index=False)
-        # print("==============================")
+
 
         return mask_img, raw_img
 

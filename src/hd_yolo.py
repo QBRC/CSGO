@@ -11,17 +11,18 @@ import os
 SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 
 class yolo_standalone():
-  def __init__(self, img_path, device, mpp):
+  def __init__(self, img_path, device, mpp, model_path=None):
     self.img_path = img_path
     self.device = device
     self.mpp = mpp
+    self.model_path = model_path
   
   def args_init(self):
     args_yolo = argparse.Namespace()
     args_yolo.data_path = self.img_path
     args_yolo.output_dir = './'
     args_yolo.device = self.device 
-    args_yolo.model = os.path.join(SRC_DIR, 'for_dev_only/pretrained_weights/lung_best.float16.torchscript.pt')
+    args_yolo.model = self.model_path
     args_yolo.meta_info = os.path.join(SRC_DIR, 'hd_wsi/meta_info.yaml')
     args_yolo.mpp = self.mpp
     args_yolo.box_only = False

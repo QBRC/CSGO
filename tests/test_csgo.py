@@ -5,6 +5,13 @@ import pytest
 from models import CSGO
 from torch_models import UNet, SoftDiceLoss
 import numpy as np
+import os
+import skimage
+
+YOLO_PATH = './src/pretrained_weights/lung_best.float16.torchscript.pt'
+UNET_PATH = './src/pretrained_weights/epoch_190.pt'
+IMG_PATH = './example_patches/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
+
 
 def test_csgo_init_no_gpu():
   cell_seg_go = CSGO() # GPU false by default
@@ -18,15 +25,9 @@ def test_csgo_init_with_gpu():
   assert cell_seg_go.device.type == 'cuda'
 
 @pytest.fixture
-def csgo_no_gpu():
-  'create fixture to test multiple mpp conversion scenarios'
-  cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
-  return cell_seg_go
-
-@pytest.fixture
 def csgo_for_tests_shared():
   'create fixture to test multiple mpp conversion scenarios'
-  cell_seg_go = CSGO(zoom=40, mpp=0.25)
+  cell_seg_go = CSGO(yolo_path=YOLO_PATH, unet_path=UNET_PATH, zoom=40, mpp=0.25)
   return cell_seg_go
 
 def test_resolution_mpp_convertion(csgo_for_tests_shared):
@@ -40,10 +41,7 @@ def test_resolution_mpp_convertion(csgo_for_tests_shared):
   assert new_mpp == pytest.approx(expected_mpp)
 
 def test_unet_init(csgo_for_tests_shared):
-  try:
-    csgo_for_tests_shared.unet_init()
-  except FileNotFoundError: # specific to GitHub CI
-    pytest.skip('No weights uploaded to GitHub')
+  csgo_for_tests_shared.unet_init()
   
   model = csgo_for_tests_shared.model
   assert isinstance(model, UNet)
@@ -53,10 +51,7 @@ def test_unet_seg(csgo_for_tests_shared):
   Test if UNet is producing the expected outputs.
   This only tests the software portion (i.e. output sizes, values), visual inspection needs to be conducted seprately.
   '''
-  try:
-    csgo_for_tests_shared.unet_init()
-  except FileNotFoundError: # specific to GitHub CI
-    pytest.skip('No weights uploaded to GitHub')
+  csgo_for_tests_shared.unet_init()
 
   rand_img = np.random.uniform(low=0, high=255, size=(512, 512, 3))
   
@@ -65,12 +60,28 @@ def test_unet_seg(csgo_for_tests_shared):
   max_check = membrane_pred <= 255
   assert np.all(min_check) and np.all(max_check)
 
-# def test_yolo_init(csgo_no_gpu):
-  # 'test if yolo can be run'
-  # img_path = '../for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
-  # args = csgo_no_gpu.run_yolo(img_path, mpp=0.25)
 
+def test_watershed(csgo_for_tests_shared):
+  TEST_DIR = os.path.realpath(os.path.dirname(__file__))
+  nuclei_masks = skimage.io.imread(os.path.join(TEST_DIR, 'test_nuclei_masks.tiff'))
+  membrane_masks = skimage.io.imread(os.path.join(TEST_DIR, 'test_membrane_masks.tiff'))
 
+  cell_seg = csgo_for_tests_shared.watershed(nuclei_masks, membrane_masks, cell_size = 40)
+  
+  assert isinstance(cell_seg, np.ndarray)
+  assert cell_seg.shape == nuclei_masks.shape
+
+def test_segmentation(csgo_for_tests_shared):
+  '''
+  light weight segmentation test. Visual inspection is needed.
+  '''
+  try:
+    res = csgo_for_tests_shared.segment(IMG_PATH, cell_size=40)
+    assert isinstance(res, np.ndarray)
+
+  # generic errors. Recommend code review if skipped
+  except (FileNotFoundError, ValueError): # specific to GitHub CI
+    pytest.skip('No Yolo weights uploaded to GitHub')
 
 
   

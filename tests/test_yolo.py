@@ -7,7 +7,8 @@ import pytest
 import logging
 log = logging.getLogger(__name__)
 
-IMG_PATH = './src/for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
+IMG_PATH = './example_patches/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
+YOLO_PATH = './src/pretrained_weights/lung_best.float16.torchscript.pt'
 DEVICE = torch.device('cpu')
 
 
@@ -15,10 +16,10 @@ def test_yolo_init():
   '''
   Test if HD-Yolo can be intialized
   '''
-  yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25)
+  yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25, model_path=YOLO_PATH)
   args = yolo.args_init()
   assert args.box_only == False
-  assert args.data_path == './src/for_dev_only/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
+  assert args.data_path == './example_patches/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
 
   # check some class attributes
   class_args = yolo.args_yolo
@@ -31,7 +32,7 @@ def test_yolo_inference():
   Test if HD-Yolo can produce the output as intended.
   '''
 
-  yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25)
+  yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25, model_path=YOLO_PATH)
   args = yolo.args_init()
 
   # on GitHub CI, skip since no model weights available

@@ -2,4 +2,7 @@
 *.pyc
 
 # pretrained weights too large for upload
-pretrained_weights
+src/pretrained_weights/lung*
+
+# code coverages
+tests/coverage
