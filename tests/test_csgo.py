@@ -8,6 +8,10 @@ import numpy as np
 import os
 import skimage
 
+YOLO_PATH = './src/pretrained_weights/lung_best.float16.torchscript.pt'
+UNET_PATH = './src/pretrained_weights/epoch_190.pt'
+
+
 def test_csgo_init_no_gpu():
   cell_seg_go = CSGO() # GPU false by default
   assert cell_seg_go.device.type == 'cpu'
@@ -20,15 +24,9 @@ def test_csgo_init_with_gpu():
   assert cell_seg_go.device.type == 'cuda'
 
 @pytest.fixture
-def csgo_no_gpu():
-  'create fixture to test multiple mpp conversion scenarios'
-  cell_seg_go = CSGO(gpu=False, zoom=40, mpp=0.25)
-  return cell_seg_go
-
-@pytest.fixture
 def csgo_for_tests_shared():
   'create fixture to test multiple mpp conversion scenarios'
-  cell_seg_go = CSGO(zoom=40, mpp=0.25)
+  cell_seg_go = CSGO(yolo_path=YOLO_PATH, unet_path=UNET_PATH, zoom=40, mpp=0.25)
   return cell_seg_go
 
 def test_resolution_mpp_convertion(csgo_for_tests_shared):
