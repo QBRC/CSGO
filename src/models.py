@@ -18,10 +18,29 @@ SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 class CSGO():
   def __init__(self, yolo_path=None, unet_path=None, gpu=False, save=False, output_dir=None, zoom=40, mpp=0.25):
     """
-    Define model level info.
-    zoom: 1st data point to convert resolution and mpp
-    mpp: 2nd data point to convert resolution and mpp
-    standard equipment places 40x images at MPP = 0.25
+    Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
+
+    Parameters
+    ----------
+    yolo_path : str
+        Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei
+    unet_path : str
+        Path of the U-Net model pretrained weight. U-Net predicts membrane
+    gpu : bool, default False
+        Whether to use GPU to evaluate the models
+    save : bool, default False
+        Whether to save CSGO outputs (see more detailed under `Notes`)
+    output_dir : str
+        The path to save CSGO outputs 
+    zoom : int, default 40
+        The first data point needed to convert resolution and mpp
+    mpp : int, default 0.25
+        The second data point needed to convert resolution and mpp
+
+    Notes
+    -----
+    If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
+    Standard imaging equipment places 40x zoomed images at MPP = 0.25
     """
     if gpu:
       # TODO: re-define device
