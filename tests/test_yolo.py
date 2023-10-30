@@ -1,4 +1,4 @@
-from hd_yolo import yolo_standalone
+from hd_yolo import yoloStandalone
 import numpy as np
 import torch
 import os
@@ -16,7 +16,7 @@ def test_yolo_init():
   '''
   Test if HD-Yolo can be intialized
   '''
-  yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25, model_path=YOLO_PATH)
+  yolo = yoloStandalone(IMG_PATH, device=DEVICE, mpp=0.25, model_path=YOLO_PATH)
   args = yolo.args_init()
   assert args.box_only == False
   assert args.data_path == './example_patches/TCGA-UB-AA0V-01Z-00-DX1.FB59AF14-B425-488D-94FD-E999D4057468.png'
@@ -32,7 +32,7 @@ def test_yolo_inference():
   Test if HD-Yolo can produce the output as intended.
   '''
 
-  yolo = yolo_standalone(IMG_PATH, device=DEVICE, mpp=0.25, model_path=YOLO_PATH)
+  yolo = yoloStandalone(IMG_PATH, device=DEVICE, mpp=0.25, model_path=YOLO_PATH)
   args = yolo.args_init()
 
   # on GitHub CI, skip since no model weights available

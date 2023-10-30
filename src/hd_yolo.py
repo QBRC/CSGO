@@ -10,14 +10,20 @@ import os
 # find the path this file
 SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 
-class yolo_standalone():
+class yoloStandalone():
   def __init__(self, img_path, device, mpp, model_path=None):
+    """
+    A lightweight HD-Yolo used to extract patch-level nuclei information.
+    """
     self.img_path = img_path
     self.device = device
     self.mpp = mpp
     self.model_path = model_path
   
   def args_init(self):
+    """
+    Initializes the HD-Yolo arguments 
+    """
     args_yolo = argparse.Namespace()
     args_yolo.data_path = self.img_path
     args_yolo.output_dir = './'
@@ -33,6 +39,9 @@ class yolo_standalone():
     return args_yolo
 
   def run_inference(self):
+    """
+    Wrapper for the original `run_patch_inference`
+    """
     # 0 is the background (non-nuclei) pixel value 
     nuclei_pred, patch = run_patch_inference.main(self.args_yolo, self.device)
     return nuclei_pred, patch

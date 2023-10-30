@@ -1,4 +1,4 @@
-from hd_yolo import yolo_standalone
+from hd_yolo import yoloStandalone
 import argparse
 import torch
 from skimage.measure import label
@@ -78,7 +78,7 @@ class CSGO():
     return new_mpp
     
   def run_yolo(self, img_path, mpp):
-    yolo = yolo_standalone(img_path, self.device, mpp, self.yolo_path)
+    yolo = yoloStandalone(img_path, self.device, mpp, self.yolo_path)
     args_yolo = yolo.args_init()
     nuclei_pred, patch = yolo.run_inference()
 
@@ -288,6 +288,9 @@ class CSGO():
 
 
   def segment(self, img_path, cell_size = 50, img_resolution=40):
+    """
+    Performs segmentation given an image path.
+    """
     ## Nuclei segmentation with HD-Yolo ##
     patch_mpp = self.convert_resolution_to_mpp(img_resolution)
     nuclei_pred, patch = self.run_yolo(img_path, patch_mpp)
