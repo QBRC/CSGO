@@ -155,6 +155,7 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="csgo.html">CSGO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yolo.html">HD-Yolo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unet.html">UNet</a></li>
 </ul>
 
 </div>
@@ -191,7 +192,7 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#Y"><strong>Y</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#Y"><strong>Y</strong></a></div>
 </section>
 <section id="A" class="genindex-section">
   <h2>A</h2>
@@ -207,10 +208,16 @@
   <h2>C</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="csgo.html#models.CSGO.convert_resolution_to_mpp">convert_resolution_to_mpp() (models.CSGO method)</a>
+        <li><a href="unet.html#torch_models.Conv2d">Conv2d (class in torch_models)</a>
+</li>
+        <li><a href="unet.html#torch_models.Conv2dBNReLU">Conv2dBNReLU (class in torch_models)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.ConvBNReLU">ConvBNReLU (class in torch_models)</a>
+</li>
+        <li><a href="csgo.html#models.CSGO.convert_resolution_to_mpp">convert_resolution_to_mpp() (models.CSGO method)</a>
+</li>
         <li><a href="csgo.html#models.CSGO">CSGO (class in models)</a>
 </li>
     </ul></td>
@@ -223,6 +230,40 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="csgo.html#models.CSGO.find_missed_nuclei">find_missed_nuclei() (models.CSGO method)</a>
 </li>
+        <li><a href="unet.html#torch_models.IoU.forward">forward() (torch_models.IoU method)</a>
+
+        <ul>
+          <li><a href="unet.html#torch_models.SoftDiceLoss.forward">(torch_models.SoftDiceLoss method)</a>
+</li>
+          <li><a href="unet.html#torch_models.UNet.forward">(torch_models.UNet method)</a>
+</li>
+          <li><a href="unet.html#torch_models.UNetFeatures.forward">(torch_models.UNetFeatures method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.get_norm_layer_and_bias">get_norm_layer_and_bias() (in module torch_models)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.SubPixelConv2d.icnr_">icnr_() (torch_models.SubPixelConv2d method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.IoU">IoU (class in torch_models)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -233,6 +274,15 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="csgo.html#models.CSGO.membrane_detection">membrane_detection() (models.CSGO method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    module
+
+        <ul>
+          <li><a href="unet.html#module-torch_models">torch_models</a>
+</li>
+        </ul></li>
     </ul></td>
   </tr></table>
 </section>
@@ -251,6 +301,10 @@
   <h2>R</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.ResizeConv2d">ResizeConv2d (class in torch_models)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="yolo.html#hd_yolo.yoloStandalone.run_inference">run_inference() (hd_yolo.yoloStandalone method)</a>
 </li>
     </ul></td>
@@ -264,6 +318,12 @@
         <li><a href="csgo.html#models.CSGO.segment">segment() (models.CSGO method)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.SoftDiceLoss">SoftDiceLoss (class in torch_models)</a>
+</li>
+        <li><a href="unet.html#torch_models.SubPixelConv2d">SubPixelConv2d (class in torch_models)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -274,6 +334,15 @@
         <li><a href="csgo.html#models.CSGO.to_device">to_device() (models.CSGO method)</a>
 </li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    torch_models
+
+        <ul>
+          <li><a href="unet.html#module-torch_models">module</a>
+</li>
+        </ul></li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -281,7 +350,13 @@
   <h2>U</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="unet.html#torch_models.UNet">UNet (class in torch_models)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="csgo.html#models.CSGO.unet_init">unet_init() (models.CSGO method)</a>
+</li>
+        <li><a href="unet.html#torch_models.UNetFeatures">UNetFeatures (class in torch_models)</a>
 </li>
     </ul></td>
   </tr></table>
