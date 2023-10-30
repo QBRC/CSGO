@@ -40,6 +40,7 @@ class CSGO():
     Notes
     -----
     If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
+    
     Standard imaging equipment places 40x zoomed images at MPP = 0.25
     """
     if gpu:
@@ -56,8 +57,21 @@ class CSGO():
 
   def convert_resolution_to_mpp(self, img_resolution=40):
     """
-    Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). Calculation based on previously defined zoom&mpp during class init.
-    e.g.: if 40x corresponds to 0.25 MPP, then 20x corresponds to 0.5 MPP
+    Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). 
+    
+    Parameters
+    ----------
+    img_resolution : int
+        The resolution of the incoming patch
+   
+    Returns
+    -------
+    new_mpp : int
+        Converted MPP based on the previously defined zoom&mpp during class init.
+   
+    Example
+    -------
+    If 40x corresponds to 0.25 MPP (defined during init), then 20x corresponds to 0.5 MPP
     """
     factor_from_defined_zoom = img_resolution / self.zoom
     new_mpp = self.mpp / factor_from_defined_zoom

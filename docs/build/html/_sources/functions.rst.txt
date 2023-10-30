@@ -1,7 +1,10 @@
-API
-===
+Classes
+=======
+
 .. automodule:: models
 .. autosummary::
-   :toctree: generated
+   :toctree: auto_generated
 
    CSGO
+
+   

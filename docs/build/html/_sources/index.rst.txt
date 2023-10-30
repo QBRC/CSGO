@@ -16,13 +16,10 @@ Welcome to CSGO's documentation!
 
 
 
-Indices and tables
+Introduction
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+Add CSGO Introduction here.
 
 
 Contents
@@ -31,5 +28,6 @@ Contents
 .. toctree::
 
    functions
+   
 
    
