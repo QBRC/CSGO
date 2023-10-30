@@ -1,10 +1,15 @@
 Classes
 =======
 
-.. automodule:: models
-.. autosummary::
-   :toctree: auto_generated
+.. automodule:: hd_yolo
+   :members:
+   :show-inheritance:
 
-   CSGO
+
+.. autoclass:: models.CSGO
+   :members:
+
+
+
 
    

@@ -198,9 +198,6 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="models.CSGO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">CSGO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unet_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO" title="Link to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="models.CSGO.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unet_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
@@ -225,6 +222,33 @@
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
 <p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
 <p>Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unet_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>yolo_path<span class="classifier">str</span></dt><dd><p>Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei</p>
+</dd>
+<dt>unet_path<span class="classifier">str</span></dt><dd><p>Path of the U-Net model pretrained weight. U-Net predicts membrane</p>
+</dd>
+<dt>gpu<span class="classifier">bool, default False</span></dt><dd><p>Whether to use GPU to evaluate the models</p>
+</dd>
+<dt>save<span class="classifier">bool, default False</span></dt><dd><p>Whether to save CSGO outputs (see more detailed under <cite>Notes</cite>)</p>
+</dd>
+<dt>output_dir<span class="classifier">str</span></dt><dd><p>The path to save CSGO outputs</p>
+</dd>
+<dt>zoom<span class="classifier">int, default 40</span></dt><dd><p>The first data point needed to convert resolution and mpp</p>
+</dd>
+<dt>mpp<span class="classifier">int, default 0.25</span></dt><dd><p>The second data point needed to convert resolution and mpp</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Notes<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
+<p>Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
 </section>
 </dd></dl>
 
@@ -242,7 +266,7 @@
 <td><p>Given transformed distance from ndi, find the local minima and mark them as new nucleus &#64;param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()       nucleus_label: nucleus prediction results from HD-Staining       cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus           for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">membrane_detection</span></code>(patch, patch_mpp[, model_mpp])</p></td>
-<td><p></p></td>
+<td><p>xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_membrane_from_patch</span></code>(img[, ...])</p></td>
 <td><p>Performs membrane segmentation after resizing the original image &#64;param img: the H&amp;E stain image        patch_mpp: the MPP of the image. Used to calculate the model input size automatically.</p></td>
@@ -265,6 +289,7 @@
 </tbody>
 </table>
 </div>
+</section>
 </dd></dl>
 
 </section>

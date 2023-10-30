@@ -155,8 +155,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../functions.html">Functions</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Functions</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../generated2/models.CSGO.html">models.CSGO</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../functions.html">Classes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../auto_generated/models.CSGO.html">models.CSGO</a></li>
 </ul>
 </li>
 </ul>
@@ -223,8 +223,8 @@
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
-<p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.
-Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
+<p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
+<p>Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
 </section>
 </dd></dl>
 
@@ -232,7 +232,7 @@ Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../models.CSGO.html#models.CSGO.__init__" title="models.CSGO.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([yolo_path, unet_path, gpu, save, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#models.CSGO.__init__" title="models.CSGO.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([yolo_path, unet_path, gpu, save, ...])</p></td>
 <td><p>Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_resolution_to_mpp</span></code>([img_resolution])</p></td>
@@ -242,7 +242,7 @@ Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
 <td><p>Given transformed distance from ndi, find the local minima and mark them as new nucleus &#64;param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()       nucleus_label: nucleus prediction results from HD-Staining       cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus           for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">membrane_detection</span></code>(patch, patch_mpp[, model_mpp])</p></td>
-<td><p></p></td>
+<td><p>xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_membrane_from_patch</span></code>(img[, ...])</p></td>
 <td><p>Performs membrane segmentation after resizing the original image &#64;param img: the H&amp;E stain image        patch_mpp: the MPP of the image. Used to calculate the model input size automatically.</p></td>
