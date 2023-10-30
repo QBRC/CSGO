@@ -1,5 +1,5 @@
-Classes
-=======
+CSGO
+====
 
 
 .. .. automodule:: hd_yolo
@@ -10,8 +10,7 @@ Classes
 .. autoclass:: models.CSGO
    :members:
 
-.. autoclass:: hd_yolo.yoloStandalone
-   :members:
+
 
 
 

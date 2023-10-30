@@ -1,15 +1,15 @@
 <!doctype html>
-<html class="no-js" lang="en" data-content_root="../">
+<html class="no-js" lang="en" data-content_root="./">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>models.CSGO - CSGO 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+        <title>CSGO - CSGO 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
     
 
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">CSGO 0.1 documentation</div></a>
+      <a href="index.html"><div class="brand">CSGO 0.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -143,19 +143,19 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
   <span class="sidebar-brand-text">CSGO 0.1 documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../functions.html">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yolo.html">HD-Yolo</a></li>
 </ul>
 
 </div>
@@ -190,8 +190,8 @@
           </label>
         </div>
         <article role="main">
-          <section id="models-csgo">
-<h1>models.CSGO<a class="headerlink" href="#models-csgo" title="Link to this heading">#</a></h1>
+          <section id="csgo">
+<h1>CSGO<a class="headerlink" href="#csgo" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="models.CSGO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">CSGO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unet_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO" title="Link to this definition">#</a></dt>
@@ -220,72 +220,110 @@
 <p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
 <p>Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="models.CSGO.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unet_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.__init__" title="Link to this definition">#</a></dt>
-<dd><p>Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p>
+<dt class="sig sig-object py" id="models.CSGO.convert_resolution_to_mpp">
+<span class="sig-name descname"><span class="pre">convert_resolution_to_mpp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.convert_resolution_to_mpp" title="Link to this definition">#</a></dt>
+<dd><p>Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP).</p>
 <section id="id1">
 <h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>yolo_path<span class="classifier">str</span></dt><dd><p>Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei</p>
-</dd>
-<dt>unet_path<span class="classifier">str</span></dt><dd><p>Path of the U-Net model pretrained weight. U-Net predicts membrane</p>
-</dd>
-<dt>gpu<span class="classifier">bool, default False</span></dt><dd><p>Whether to use GPU to evaluate the models</p>
-</dd>
-<dt>save<span class="classifier">bool, default False</span></dt><dd><p>Whether to save CSGO outputs (see more detailed under <cite>Notes</cite>)</p>
-</dd>
-<dt>output_dir<span class="classifier">str</span></dt><dd><p>The path to save CSGO outputs</p>
-</dd>
-<dt>zoom<span class="classifier">int, default 40</span></dt><dd><p>The first data point needed to convert resolution and mpp</p>
-</dd>
-<dt>mpp<span class="classifier">int, default 0.25</span></dt><dd><p>The second data point needed to convert resolution and mpp</p>
+<dt>img_resolution<span class="classifier">int</span></dt><dd><p>The resolution of the incoming patch</p>
 </dd>
 </dl>
 </section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>new_mpp<span class="classifier">int</span></dt><dd><p>Converted MPP based on the previously defined zoom&amp;mpp during class init.</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>If 40x corresponds to 0.25 MPP (defined during init), then 20x corresponds to 0.5 MPP</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.find_missed_nuclei">
+<span class="sig-name descname"><span class="pre">find_missed_nuclei</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndi_distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nucleus_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.find_missed_nuclei" title="Link to this definition">#</a></dt>
+<dd><p>Given transformed distance from ndi, find the local minima and mark them as new nucleus
+&#64;param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()</p>
+<blockquote>
+<div><p>nucleus_label: nucleus prediction results from HD-Staining
+cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus</p>
+<blockquote>
+<div><p>for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label</p>
+</div></blockquote>
+</div></blockquote>
+<p>&#64;return nucleus_label: nucleus labels found by both HD-Staining and minimum local distances</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.membrane_detection">
+<span class="sig-name descname"><span class="pre">membrane_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_mpp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.membrane_detection" title="Link to this definition">#</a></dt>
+<dd><p>xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p>
 <section id="id2">
-<h3>Notes<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>patch<span class="classifier">str</span></dt><dd><p>Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei</p>
+</dd>
+<dt>patch_mpp<span class="classifier">str</span></dt><dd><p>Path of the U-Net model pretrained weight. U-Net predicts membrane</p>
+</dd>
+<dt>model_mpp<span class="classifier">int, default 0.5</span></dt><dd><p>Whether to use GPU to evaluate the models</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Notes<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
 <p>Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
 </section>
 </dd></dl>
 
-<p class="rubric">Methods</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#models.CSGO.__init__" title="models.CSGO.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([yolo_path, unet_path, gpu, save, ...])</p></td>
-<td><p>Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions.html#models.CSGO.convert_resolution_to_mpp" title="models.CSGO.convert_resolution_to_mpp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_resolution_to_mpp</span></code></a>([img_resolution])</p></td>
-<td><p>Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions.html#models.CSGO.find_missed_nuclei" title="models.CSGO.find_missed_nuclei"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_missed_nuclei</span></code></a>(ndi_distance, ...)</p></td>
-<td><p>Given transformed distance from ndi, find the local minima and mark them as new nucleus &#64;param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()       nucleus_label: nucleus prediction results from HD-Staining       cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus           for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions.html#models.CSGO.membrane_detection" title="models.CSGO.membrane_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">membrane_detection</span></code></a>(patch, patch_mpp[, model_mpp])</p></td>
-<td><p>xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions.html#models.CSGO.predict_membrane_from_patch" title="models.CSGO.predict_membrane_from_patch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_membrane_from_patch</span></code></a>(img[, ...])</p></td>
-<td><p>Performs membrane segmentation after resizing the original image &#64;param img: the H&amp;E stain image        patch_mpp: the MPP of the image. Used to calculate the model input size automatically.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_yolo</span></code>(img_path, mpp)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">segment</span></code>(img_path[, cell_size, img_resolution])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions.html#models.CSGO.to_device" title="models.CSGO.to_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_device</span></code></a>(x, device)</p></td>
-<td><p>Move objects to device. Option 2 and 3 not expected in this app. 1). if x.to(device) is valid, directly call it. 2). if x is a function, ignore it 3). if x is a dict, list, tuple of objects. recursively send elements to device. Function makes a copy of all non-gpu objects of x. It will skip objects already stored on gpu. .</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../functions.html#models.CSGO.unet_init" title="models.CSGO.unet_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unet_init</span></code></a>()</p></td>
-<td><p>Initializes the UNet model and load the model weights</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../functions.html#models.CSGO.watershed" title="models.CSGO.watershed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">watershed</span></code></a>(nuclei_mask, membrane_mask, cell_size)</p></td>
-<td><p>performs watershed using predicted nucleus (HD-Yolo) and membranes (UNet).</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.predict_membrane_from_patch">
+<span class="sig-name descname"><span class="pre">predict_membrane_from_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.predict_membrane_from_patch" title="Link to this definition">#</a></dt>
+<dd><p>Performs membrane segmentation after resizing the original image
+&#64;param img: the H&amp;E stain image</p>
+<blockquote>
+<div><p>patch_mpp: the MPP of the image. Used to calculate the model input size automatically.</p>
+</div></blockquote>
+<p>&#64;return output: membrane prediction</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.segment">
+<span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.segment" title="Link to this definition">#</a></dt>
+<dd><p>Performs segmentation given an image path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.to_device">
+<span class="sig-name descname"><span class="pre">to_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.to_device" title="Link to this definition">#</a></dt>
+<dd><p>Move objects to device.
+Option 2 and 3 not expected in this app.
+1). if x.to(device) is valid, directly call it.
+2). if x is a function, ignore it
+3). if x is a dict, list, tuple of objects.</p>
+<blockquote>
+<div><p>recursively send elements to device.</p>
+</div></blockquote>
+<p>Function makes a copy of all non-gpu objects of x. 
+It will skip objects already stored on gpu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.unet_init">
+<span class="sig-name descname"><span class="pre">unet_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.unet_init" title="Link to this definition">#</a></dt>
+<dd><p>Initializes the UNet model and load the model weights</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.watershed">
+<span class="sig-name descname"><span class="pre">watershed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nuclei_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">membrane_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.watershed" title="Link to this definition">#</a></dt>
+<dd><p>performs watershed using predicted nucleus (HD-Yolo) and membranes (UNet).</p>
+</dd></dl>
+
 </section>
 </dd></dl>
 
@@ -328,9 +366,16 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">models.CSGO</a><ul>
+<li><a class="reference internal" href="#">CSGO</a><ul>
 <li><a class="reference internal" href="#models.CSGO"><code class="docutils literal notranslate"><span class="pre">CSGO</span></code></a><ul>
-<li><a class="reference internal" href="#models.CSGO.__init__"><code class="docutils literal notranslate"><span class="pre">CSGO.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.convert_resolution_to_mpp"><code class="docutils literal notranslate"><span class="pre">CSGO.convert_resolution_to_mpp()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.find_missed_nuclei"><code class="docutils literal notranslate"><span class="pre">CSGO.find_missed_nuclei()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.membrane_detection"><code class="docutils literal notranslate"><span class="pre">CSGO.membrane_detection()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.predict_membrane_from_patch"><code class="docutils literal notranslate"><span class="pre">CSGO.predict_membrane_from_patch()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.segment"><code class="docutils literal notranslate"><span class="pre">CSGO.segment()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.to_device"><code class="docutils literal notranslate"><span class="pre">CSGO.to_device()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.unet_init"><code class="docutils literal notranslate"><span class="pre">CSGO.unet_init()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.watershed"><code class="docutils literal notranslate"><span class="pre">CSGO.watershed()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -344,9 +389,9 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=2709fde1"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+</div><script src="_static/documentation_options.js?v=2709fde1"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     </body>
 </html>

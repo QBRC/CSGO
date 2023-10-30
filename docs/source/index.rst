@@ -11,7 +11,7 @@ Welcome to CSGO's documentation!
    This project is under active development.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
 
@@ -27,7 +27,8 @@ Contents
 
 .. toctree::
 
-   functions
+   csgo
+   yolo
    
 
    

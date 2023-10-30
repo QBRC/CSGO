@@ -190,8 +190,8 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-hd_yolo">
-<span id="classes"></span><h1>Classes<a class="headerlink" href="#module-hd_yolo" title="Link to this heading">#</a></h1>
+          <section id="classes">
+<h1>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="models.CSGO">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">CSGO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unet_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO" title="Link to this definition">#</a></dt>
@@ -292,6 +292,12 @@ cell_size: the average diameter of the cell. Used to calculate minimum separatio
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="models.CSGO.segment">
+<span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.segment" title="Link to this definition">#</a></dt>
+<dd><p>Performs segmentation given an image path.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.to_device">
 <span class="sig-name descname"><span class="pre">to_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.to_device" title="Link to this definition">#</a></dt>
 <dd><p>Move objects to device.
@@ -319,6 +325,24 @@ It will skip objects already stored on gpu.</p>
 </dd></dl>
 
 </section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hd_yolo.yoloStandalone">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hd_yolo.</span></span><span class="sig-name descname"><span class="pre">yoloStandalone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hd_yolo.yoloStandalone" title="Link to this definition">#</a></dt>
+<dd><p>A lightweight HD-Yolo used to extract patch-level nuclei information.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hd_yolo.yoloStandalone.args_init">
+<span class="sig-name descname"><span class="pre">args_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hd_yolo.yoloStandalone.args_init" title="Link to this definition">#</a></dt>
+<dd><p>Initializes the HD-Yolo arguments</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hd_yolo.yoloStandalone.run_inference">
+<span class="sig-name descname"><span class="pre">run_inference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hd_yolo.yoloStandalone.run_inference" title="Link to this definition">#</a></dt>
+<dd><p>Wrapper for the original <cite>run_patch_inference</cite></p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -376,9 +400,15 @@ It will skip objects already stored on gpu.</p>
 <li><a class="reference internal" href="#models.CSGO.find_missed_nuclei"><code class="docutils literal notranslate"><span class="pre">CSGO.find_missed_nuclei()</span></code></a></li>
 <li><a class="reference internal" href="#models.CSGO.membrane_detection"><code class="docutils literal notranslate"><span class="pre">CSGO.membrane_detection()</span></code></a></li>
 <li><a class="reference internal" href="#models.CSGO.predict_membrane_from_patch"><code class="docutils literal notranslate"><span class="pre">CSGO.predict_membrane_from_patch()</span></code></a></li>
+<li><a class="reference internal" href="#models.CSGO.segment"><code class="docutils literal notranslate"><span class="pre">CSGO.segment()</span></code></a></li>
 <li><a class="reference internal" href="#models.CSGO.to_device"><code class="docutils literal notranslate"><span class="pre">CSGO.to_device()</span></code></a></li>
 <li><a class="reference internal" href="#models.CSGO.unet_init"><code class="docutils literal notranslate"><span class="pre">CSGO.unet_init()</span></code></a></li>
 <li><a class="reference internal" href="#models.CSGO.watershed"><code class="docutils literal notranslate"><span class="pre">CSGO.watershed()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hd_yolo.yoloStandalone"><code class="docutils literal notranslate"><span class="pre">yoloStandalone</span></code></a><ul>
+<li><a class="reference internal" href="#hd_yolo.yoloStandalone.args_init"><code class="docutils literal notranslate"><span class="pre">yoloStandalone.args_init()</span></code></a></li>
+<li><a class="reference internal" href="#hd_yolo.yoloStandalone.run_inference"><code class="docutils literal notranslate"><span class="pre">yoloStandalone.run_inference()</span></code></a></li>
 </ul>
 </li>
 </ul>
