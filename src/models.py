@@ -85,14 +85,15 @@ class CSGO():
     return nuclei_pred, patch
 
   def to_device(self, x, device):
-    """ Move objects to device.
-        Option 2 and 3 not expected in this app.
-        1). if x.to(device) is valid, directly call it.
-        2). if x is a function, ignore it
-        3). if x is a dict, list, tuple of objects.
-            recursively send elements to device.
-        Function makes a copy of all non-gpu objects of x. 
-        It will skip objects already stored on gpu. 
+    """
+    Move objects to device.
+
+    Parameters
+    ----------
+    x : 
+        PyTorch componenets that can be directly called to load to device
+    device : torch.device
+        The PyTorch device destination 
     """
     return x.to(device)
   
@@ -112,11 +113,21 @@ class CSGO():
 
   def predict_membrane_from_patch(self, img, patch_mpp=0.25, model_mpp=0.5):
     """
-    Performs membrane segmentation after resizing the original image
-    @param img: the H&E stain image
-           patch_mpp: the MPP of the image. Used to calculate the model input size automatically.
+    Helper function to perform membrane segmentation after resizing the original image
+    
+    Parameters
+    ----------
+    img : ndarray
+        The H&E stained image.
+    patch_mpp : float
+        The MPP of the image. This is used to calculate the model input size automatically.
+    model_mpp : float
+        The MPP of the model. The resolution of the images used to train the U-Net model
 
-    @return output: membrane prediction
+    Returns
+    -------
+    output : ndarray
+        Membrane predictions
     """
 
     # resizing image to desired dimension
@@ -172,22 +183,21 @@ class CSGO():
 
   def membrane_detection(self, patch, patch_mpp, model_mpp=0.5):
     """
-    xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
-
+    Performs membrane prediction by first initialize the U-net, load the model weights, and evaluate the model.
+    
     Parameters
     ----------
-    patch : str
-        Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei
-    patch_mpp : str
-        Path of the U-Net model pretrained weight. U-Net predicts membrane
-    model_mpp : int, default 0.5
-        Whether to use GPU to evaluate the models
+    patch : ndarray
+        The H&E stained image.
+    patch_mpp : float
+        The MPP of the image. This is used to calculate the model input size automatically.
+    model_mpp : float
+        The MPP of the model. The resolution of the images used to train the U-Net model
 
-    Notes
-    -----
-    If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
-    
-    Standard imaging equipment places 40x zoomed images at MPP = 0.25
+    Returns
+    -------
+    membrane_mask : ndarray
+        Membrane predictions
     """
     # add a class attribute model
     self.unet_init()
@@ -200,13 +210,20 @@ class CSGO():
 
   def find_missed_nuclei(self, ndi_distance, nucleus_label, cell_size):
       """
-      Given transformed distance from ndi, find the local minima and mark them as new nucleus
-      @param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()
-            nucleus_label: nucleus prediction results from HD-Staining
-            cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus
-                for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label
-      
-      @return nucleus_label: nucleus labels found by both HD-Staining and minimum local distances
+      Given transformed distance from ndi, find the local minima and mark them as new nucleus.
+     
+      Parameters
+      ---------- 
+      ndi_distance : int 
+          topology map of membrane and nucleus computed from ndi.distance_transform_edt()
+      nucleus_label : ndarray 
+          nucleus prediction results from HD-Staining
+      cell_size: 
+          the average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus. 
+        
+      Returns
+      -------
+          nucleus_label: nucleus labels found by both HD-Staining and minimum local distances.
       """
 
       # determines minimum separation

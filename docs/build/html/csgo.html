@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="HD-Yolo" href="yolo.html" /><link rel="prev" title="Welcome to CSGO’s documentation!" href="index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>CSGO - CSGO 0.1 documentation</title>
@@ -154,8 +154,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">CSGO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="yolo.html">HD-Yolo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unet.html">UNet</a></li>
 </ul>
 
 </div>
@@ -246,49 +248,72 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.find_missed_nuclei">
 <span class="sig-name descname"><span class="pre">find_missed_nuclei</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndi_distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nucleus_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.find_missed_nuclei" title="Link to this definition">#</a></dt>
-<dd><p>Given transformed distance from ndi, find the local minima and mark them as new nucleus
-&#64;param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()</p>
+<dd><p>Given transformed distance from ndi, find the local minima and mark them as new nucleus.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ndi_distance<span class="classifier">int </span></dt><dd><p>topology map of membrane and nucleus computed from ndi.distance_transform_edt()</p>
+</dd>
+<dt>nucleus_label<span class="classifier">ndarray </span></dt><dd><p>nucleus prediction results from HD-Staining</p>
+</dd>
+<dt>cell_size: </dt><dd><p>the average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <blockquote>
-<div><p>nucleus_label: nucleus prediction results from HD-Staining
-cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus</p>
-<blockquote>
-<div><p>for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label</p>
+<div><p>nucleus_label: nucleus labels found by both HD-Staining and minimum local distances.</p>
 </div></blockquote>
-</div></blockquote>
-<p>&#64;return nucleus_label: nucleus labels found by both HD-Staining and minimum local distances</p>
+</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.membrane_detection">
 <span class="sig-name descname"><span class="pre">membrane_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_mpp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.membrane_detection" title="Link to this definition">#</a></dt>
-<dd><p>xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).</p>
-<section id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<dd><p>Performs membrane prediction by first initialize the U-net, load the model weights, and evaluate the model.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <dl class="simple">
-<dt>patch<span class="classifier">str</span></dt><dd><p>Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei</p>
+<dt>patch<span class="classifier">ndarray</span></dt><dd><p>The H&amp;E stained image.</p>
 </dd>
-<dt>patch_mpp<span class="classifier">str</span></dt><dd><p>Path of the U-Net model pretrained weight. U-Net predicts membrane</p>
+<dt>patch_mpp<span class="classifier">float</span></dt><dd><p>The MPP of the image. This is used to calculate the model input size automatically.</p>
 </dd>
-<dt>model_mpp<span class="classifier">int, default 0.5</span></dt><dd><p>Whether to use GPU to evaluate the models</p>
+<dt>model_mpp<span class="classifier">float</span></dt><dd><p>The MPP of the model. The resolution of the images used to train the U-Net model</p>
 </dd>
 </dl>
 </section>
-<section id="id3">
-<h3>Notes<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
-<p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
-<p>Standard imaging equipment places 40x zoomed images at MPP = 0.25</p>
+<section id="id5">
+<h3>Returns<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>membrane_mask<span class="classifier">ndarray</span></dt><dd><p>Membrane predictions</p>
+</dd>
+</dl>
 </section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.predict_membrane_from_patch">
 <span class="sig-name descname"><span class="pre">predict_membrane_from_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_mpp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.predict_membrane_from_patch" title="Link to this definition">#</a></dt>
-<dd><p>Performs membrane segmentation after resizing the original image
-&#64;param img: the H&amp;E stain image</p>
-<blockquote>
-<div><p>patch_mpp: the MPP of the image. Used to calculate the model input size automatically.</p>
-</div></blockquote>
-<p>&#64;return output: membrane prediction</p>
+<dd><p>Helper function to perform membrane segmentation after resizing the original image</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>img<span class="classifier">ndarray</span></dt><dd><p>The H&amp;E stained image.</p>
+</dd>
+<dt>patch_mpp<span class="classifier">float</span></dt><dd><p>The MPP of the image. This is used to calculate the model input size automatically.</p>
+</dd>
+<dt>model_mpp<span class="classifier">float</span></dt><dd><p>The MPP of the model. The resolution of the images used to train the U-Net model</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>output<span class="classifier">ndarray</span></dt><dd><p>Membrane predictions</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -300,16 +325,16 @@ cell_size: the average diameter of the cell. Used to calculate minimum separatio
 <dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.to_device">
 <span class="sig-name descname"><span class="pre">to_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.to_device" title="Link to this definition">#</a></dt>
-<dd><p>Move objects to device.
-Option 2 and 3 not expected in this app.
-1). if x.to(device) is valid, directly call it.
-2). if x is a function, ignore it
-3). if x is a dict, list, tuple of objects.</p>
-<blockquote>
-<div><p>recursively send elements to device.</p>
-</div></blockquote>
-<p>Function makes a copy of all non-gpu objects of x. 
-It will skip objects already stored on gpu.</p>
+<dd><p>Move objects to device.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>x<span class="classifier"></span></dt><dd><p>PyTorch componenets that can be directly called to load to device</p>
+</dd>
+<dt>device<span class="classifier">torch.device</span></dt><dd><p>The PyTorch device destination</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -334,8 +359,26 @@ It will skip objects already stored on gpu.</p>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="yolo.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">HD-Yolo</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
