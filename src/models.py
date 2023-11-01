@@ -1,4 +1,4 @@
-from hd_yolo import yolo_standalone
+from hd_yolo import yoloStandalone
 import argparse
 import torch
 from skimage.measure import label
@@ -18,10 +18,30 @@ SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 class CSGO():
   def __init__(self, yolo_path=None, unet_path=None, gpu=False, save=False, output_dir=None, zoom=40, mpp=0.25):
     """
-    Define model level info.
-    zoom: 1st data point to convert resolution and mpp
-    mpp: 2nd data point to convert resolution and mpp
-    standard equipment places 40x images at MPP = 0.25
+    Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
+
+    Parameters
+    ----------
+    yolo_path : str
+        Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei
+    unet_path : str
+        Path of the U-Net model pretrained weight. U-Net predicts membrane
+    gpu : bool, default False
+        Whether to use GPU to evaluate the models
+    save : bool, default False
+        Whether to save CSGO outputs (see more detailed under `Notes`)
+    output_dir : str
+        The path to save CSGO outputs 
+    zoom : int, default 40
+        The first data point needed to convert resolution and mpp
+    mpp : int, default 0.25
+        The second data point needed to convert resolution and mpp
+
+    Notes
+    -----
+    If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
+    
+    Standard imaging equipment places 40x zoomed images at MPP = 0.25
     """
     if gpu:
       # TODO: re-define device
@@ -37,15 +57,28 @@ class CSGO():
 
   def convert_resolution_to_mpp(self, img_resolution=40):
     """
-    Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). Calculation based on previously defined zoom&mpp during class init.
-    e.g.: if 40x corresponds to 0.25 MPP, then 20x corresponds to 0.5 MPP
+    Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). 
+    
+    Parameters
+    ----------
+    img_resolution : int
+        The resolution of the incoming patch
+   
+    Returns
+    -------
+    new_mpp : int
+        Converted MPP based on the previously defined zoom&mpp during class init.
+   
+    Example
+    -------
+    If 40x corresponds to 0.25 MPP (defined during init), then 20x corresponds to 0.5 MPP
     """
     factor_from_defined_zoom = img_resolution / self.zoom
     new_mpp = self.mpp / factor_from_defined_zoom
     return new_mpp
     
   def run_yolo(self, img_path, mpp):
-    yolo = yolo_standalone(img_path, self.device, mpp, self.yolo_path)
+    yolo = yoloStandalone(img_path, self.device, mpp, self.yolo_path)
     args_yolo = yolo.args_init()
     nuclei_pred, patch = yolo.run_inference()
 
@@ -138,6 +171,24 @@ class CSGO():
     return output
 
   def membrane_detection(self, patch, patch_mpp, model_mpp=0.5):
+    """
+    xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
+
+    Parameters
+    ----------
+    patch : str
+        Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei
+    patch_mpp : str
+        Path of the U-Net model pretrained weight. U-Net predicts membrane
+    model_mpp : int, default 0.5
+        Whether to use GPU to evaluate the models
+
+    Notes
+    -----
+    If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
+    
+    Standard imaging equipment places 40x zoomed images at MPP = 0.25
+    """
     # add a class attribute model
     self.unet_init()
 
@@ -237,6 +288,9 @@ class CSGO():
 
 
   def segment(self, img_path, cell_size = 50, img_resolution=40):
+    """
+    Performs segmentation given an image path.
+    """
     ## Nuclei segmentation with HD-Yolo ##
     patch_mpp = self.convert_resolution_to_mpp(img_resolution)
     nuclei_pred, patch = self.run_yolo(img_path, patch_mpp)

@@ -1,0 +1,18 @@
+Classes
+=======
+
+
+.. .. automodule:: hd_yolo
+..    :members:
+..    :show-inheritance:
+
+
+.. autoclass:: models.CSGO
+   :members:
+
+.. autoclass:: hd_yolo.yoloStandalone
+   :members:
+
+
+
+   
