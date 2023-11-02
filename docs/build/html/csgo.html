@@ -320,14 +320,36 @@
 <dt class="sig sig-object py" id="models.CSGO.segment">
 <span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.segment" title="Link to this definition">#</a></dt>
 <dd><p>Performs segmentation given an image path.</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>img_path<span class="classifier">str</span></dt><dd><p>The path of the image</p>
+</dd>
+<dt>cell_size<span class="classifier">int, optional</span></dt><dd><p>The average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus, by default 50</p>
+</dd>
+<dt>img_resolution<span class="classifier">int, optional</span></dt><dd><p>The resolution of the incoming patch, by default 40</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h3>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>res_cell_seg<span class="classifier">ndarray</span></dt><dd><p>An numpy.ndarray with the original image shape. Each pixel is assigned to a cell number. No pixel will be assigned as background.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Notes<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<p>If <cite>save</cite> is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to <cite>output_dir</cite>.</p>
+</section>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.to_device">
 <span class="sig-name descname"><span class="pre">to_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.to_device" title="Link to this definition">#</a></dt>
 <dd><p>Move objects to device.</p>
-<section id="id8">
-<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>x<span class="classifier"></span></dt><dd><p>PyTorch componenets that can be directly called to load to device</p>
 </dd>
@@ -346,7 +368,25 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="models.CSGO.watershed">
 <span class="sig-name descname"><span class="pre">watershed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nuclei_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">membrane_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.CSGO.watershed" title="Link to this definition">#</a></dt>
-<dd><p>performs watershed using predicted nucleus (HD-Yolo) and membranes (UNet).</p>
+<dd><p>Performs energy-based watershed given nuclei and membrane masks</p>
+<section id="id12">
+<h3>Parameters<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>nuclei_mask<span class="classifier">ndarray</span></dt><dd><p>Basin of the watershed from the segmentation result of HD-yolo. Each pixel is assigned either a nuclei group number (1 to len(nuclei)), or background (0)</p>
+</dd>
+<dt>membrane_mask<span class="classifier">ndarray</span></dt><dd><p>Boundary of the watershed from the segmentation result of U-Net, generated from self.membrane_detection()</p>
+</dd>
+<dt>cell_size<span class="classifier">int</span></dt><dd><p>The average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus.</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h3>Returns<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>watershed_res<span class="classifier">ndarray</span></dt><dd><p>Result of watershed. Each pixel is assigned to a cell number. No pixel will be assigned as background.</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 </section>

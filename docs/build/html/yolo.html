@@ -198,6 +198,18 @@
 <dt class="sig sig-object py" id="hd_yolo.yoloStandalone">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hd_yolo.</span></span><span class="sig-name descname"><span class="pre">yoloStandalone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hd_yolo.yoloStandalone" title="Link to this definition">#</a></dt>
 <dd><p>A lightweight HD-Yolo used to extract patch-level nuclei information.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>img_path<span class="classifier">str</span></dt><dd><p>The path of the image</p>
+</dd>
+<dt>device<span class="classifier">torch.device</span></dt><dd><p>The PyTorch device destination</p>
+</dd>
+<dt>mpp<span class="classifier">int</span></dt><dd><p>The MPP of the model. The resolution of the images used to train HD-Yolo</p>
+</dd>
+<dt>model_path<span class="classifier">str, optional</span></dt><dd><p>Path of the HD-Yolo model pretrained weight, by default None</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="hd_yolo.yoloStandalone.args_init">
 <span class="sig-name descname"><span class="pre">args_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hd_yolo.yoloStandalone.args_init" title="Link to this definition">#</a></dt>
@@ -207,9 +219,13 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="hd_yolo.yoloStandalone.run_inference">
 <span class="sig-name descname"><span class="pre">run_inference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hd_yolo.yoloStandalone.run_inference" title="Link to this definition">#</a></dt>
-<dd><p>Wrapper for the original <cite>run_patch_inference</cite></p>
+<dd><p>Wrapper for the original <cite>run_patch_inference</cite>
+Notes
+—–
+For further reference, please consult the original HD-Yolo page <a class="reference external" href="https://github.com/impromptuRong/hd_wsi">https://github.com/impromptuRong/hd_wsi</a></p>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>
