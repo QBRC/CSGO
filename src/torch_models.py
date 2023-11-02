@@ -5,13 +5,26 @@ import torch.nn.functional as F
 class UNet(nn.Module):
     def __init__(self, num_classes, scale_factor=1, resize_mode='bilinear',
                  encoder={}, decoder={}, out_channels=None, return_logits=False, **kwargs):
-        """ Abstract UNet class. 
-            num_classes: num_classes in output layer.
-            scale_factor: resize to original size.
-            encoder: nn.Module or dictionary. (call UNetfeatures(**encoder)).
-            decoder: nn.Module or dictionary. (call self.default_decoder(**decoder)).
-            out_channels: call encoder.feature_channels() if None
+        """Abstract UNet class.
+
+        Parameters
+        ----------
+        num_classes : int
+            Number of classes in the output layer
+        scale_factor : int, optional
+            How much to rescale compared to the original size, by default 1
+        resize_mode : str, optional
+            By default 'bilinear'
+        encoder : nn.Module or dictionary, optional
+            Calls UNetfeatures(\**encoder)), by default {}
+        decoder : nn.Module or dictionary, optional
+            Calls self.default_decoder(\**decoder), by default {}
+        out_channels : _type_, optional
+            Calls encoder.feature_channels(), by default None
+        return_logits : bool, optional
+            Whether to return the logits from the layers, by default False
         """
+
         super(UNet, self).__init__()
         self.num_classes = num_classes
         self.resize_mode = resize_mode
@@ -51,6 +64,13 @@ class UNet(nn.Module):
         self.classifier = nn.Sequential(*classifier)
     
     def get_encoder(self, **kwargs):
+        """Initializes class `UNetFeatures`
+
+        Returns 
+        -------
+        UNetFeatures
+            Defining a part of the U-Net model
+        """
         return UNetFeatures(**kwargs)
     
     def get_decoder(self, **kwargs):
@@ -92,6 +112,21 @@ class UNet(nn.Module):
 
 class UNetFeatures(nn.Module):
     def __init__(self, in_channels=3, n_channels=32, n_downsampling=4, pool='maxpool', norm_layer='batch'):
+        """Initializes the U-Net encoder
+
+        Parameters
+        ----------
+        in_channels : int, optional
+            Number of input channels, by default 3
+        n_channels : int, optional
+            Number of channels produced by the convolution, by default 32
+        n_downsampling : int, optional
+            Number of downsampling layers, by default 4
+        pool : str, optional
+            Pooling strategy, by default 'maxpool'
+        norm_layer : str, optional
+            Name of the normalization layers, by default 'batch'
+        """
         super(UNetFeatures, self).__init__()
         assert pool in ['maxpool', 'stride'], "{} is not a supported down sampling strategy".format(pool)
         self.in_channels = 3
@@ -142,6 +177,33 @@ class UNetFeatures(nn.Module):
 class Conv2d(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True,
                  padding_mode='zeros', device=None, dtype=None):
+        """Inherents the 2D convolution layer fron torch.nn.conv2d
+        
+        Parameters
+        ----------
+        in_channels : int
+            Number of input channels
+        out_channels : int
+            Number of channels produced by the convolution
+        kernel_size : int
+            Size of the kernel matrix
+        stride : int, optional
+            Size of stride - how far the filter moves in each step, by default 1
+        padding : str or int, optional
+            Padding strategy, by default 'default'
+        dilation : int, optional
+            Spacing between kernel elements, by default 1
+        groups : int, optional
+            Number of blocked connections from input channels to output channels, by default 1
+        bias : bool, optional
+            Whether to add a learnable bias to the output, by default True
+        padding_mode : str, optional
+            Padding method, by default 'zeros'
+        device : torch.device, optional
+            The PyTorch device destination , by default None
+        dtype : ndarray.dtype
+            ndarray dtype, by default None
+        """
         if padding == 'default':
             padding = tuple((k-1)//2 for k in [kernel_size, kernel_size])
         super(Conv2d, self).__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias, padding_mode, device, dtype)
@@ -161,16 +223,12 @@ class ResizeConv2d(nn.Sequential):
 
 class SubPixelConv2d(nn.Sequential):
     """ Upsampling layer with better modelling power. 
-        Sub-pixel convolution usually gives better result than resize convolution.
-        Use incr init (and weight_norm) to avoid checkboard artifact. 
-        https://arxiv.org/pdf/1707.02937.pdf
-        May combine with (https://arxiv.org/pdf/1806.02658.pdf):
-            nn.Sequential(
-                nn.LeakyReLU(inplace=True),
-                nn.ReplicationPad2d((1,0,1,0)),
-                nn.AvgPool2d(2, stride=1),
-            )
-        to generate non-checkboard artifact image.
+
+    Notes
+    -----
+    Sub-pixel convolution usually gives better result than resize convolution.
+    Use incr init (and weight_norm) to avoid checkboard artifact, ref: https://arxiv.org/pdf/1707.02937.pdf
+    May combine with (https://arxiv.org/pdf/1806.02658.pdf): nn.Sequential(nn.LeakyReLU(inplace=True), nn.ReplicationPad2d((1,0,1,0)), nn.AvgPool2d(2, stride=1)) to generate non-checkboard artifact image.
     """
     def __init__(self, in_channels, out_channels, stride=2, 
                  conv=(Conv2d, {'kernel_size': 3, 'padding': 'default'})):
@@ -223,15 +281,44 @@ class Conv2dBNReLU(ConvBNReLU):
                  norm_layer='batch', activation=nn.ReLU(inplace=True), 
                  dropout_rate=0.0, 
                 ):
-        """ Create a Conv2d->BN->ReLU layer. 
-            norm_layer: batch, instance, None
-            activation: a nn layer.
-            padding: 
-                'default' (default): torch standard symmetric padding with (kernel_size - 1) // 2.
-                int: symmetric padding to pass to nn.Conv2d(padding=padding)
-                "same": tf padding="same", asymmetric for even kernel (l_0, r_1), etc)
-                "valid": tf padding="valid", same as padding=0
+        """Create2 a Conv2d->BN->ReLU layer. 
+
+        Parameters
+        ----------
+        in_channels : int
+            Number of input channels
+        out_channels : int
+            Number of channels produced by the convolution
+        kernel_size : int
+            Size of the kernel matrix
+        stride : int, optional
+            Size of stride - how far the filter moves in each step, by default 1
+        padding : str, optional
+            Padding strategy, by default 'default'
+        dilation : int, optional
+            Spacing between kernel elements, by default 1
+        groups : int, optional
+            Number of blocked connections from input channels to output channels, by default 1
+        bias : bool, optional
+            Whether to add a learnable bias to the output, by default None
+        norm_layer : str, optional
+            Name of the normalization layers, by default 'batch'
+        activation : nn alike, optional
+            Activation function, by default nn.ReLU(inplace=True)
+        dropout_rate : float, optional
+            Dropout rate, by default 0.0
+
+        Notes
+        -----
+        padding: 
+            'default' (default): torch standard symmetric padding with (kernel_size - 1) // 2.
+            int: symmetric padding to pass to nn.Conv2d(padding=padding)
+            "same": tf padding="same", asymmetric for even kernel (l_0, r_1), etc)
+            "valid": tf padding="valid", same as padding=0
+
+        For futher reference please consult nn.conv2d documentation: https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html
         """
+
         ## get norm layer:
         norm_layer, bias = get_norm_layer_and_bias(norm_layer, bias)
         ## use Conv2d (extended nn.Conv2d) to support padding options
@@ -243,11 +330,22 @@ class Conv2dBNReLU(ConvBNReLU):
 
 class IoU(nn.Module):
     def __init__(self, mode='iou', axis=1, eps=0.):
-        """ Return a matrix of [batch * num_classes]. 
-            Note: In order to separate from iou=0, function WILL return NaN if both 
-            y_true and y_pred are 0. Need further treatment to remove nan in either 
-            loss function or matrix.
+        """Return a matrix of [batch * num_classes].
+
+        Parameters
+        ----------
+        mode : str, optional
+            Evaluation metrics, by default 'iou'. Options ['iou', 'dice']
+        axis : int, optional
+            The direction to calculate IoU (row or column-wise), by default 1
+        eps : float, optional
+            Used to prevent zero division error, by default 0.
+        
+        Notes
+        -----
+        In order to separate from iou=0, function WILL return NaN if both y_true and y_pred are 0. Need further treatment to remove nan in either loss function or matrix.
         """
+
         super(IoU, self).__init__()
         assert mode in ['iou', 'dice']
         self.factor = {'iou': -1.0, 'dice': 0.0}[mode]
@@ -304,32 +402,51 @@ class SoftDiceLoss(IoU):
         res = -self.reduction(iou.sum(-1))
         
         return (res + 1) if self.use_positive else res
+    
 ############ helper functions below #############
 def get_norm_layer_and_bias(norm_layer='batch', use_bias=None):
-    """ Return a normalization layer and set up use_bias for convoluation layers.
-    
-    Parameters:
-        norm_layer: (str) -- the name of the normalization layer: [batch, instance]
-                    None -- no batch norm
-                    other module: nn.BatchNorm2d, nn.InstanceNorm2d
+    """Return a normalization layer and set up use_bias for convoluation layers.
 
+    Parameters
+    ----------
+    norm_layer : str or nn alike, optional
+        If str, the name of the normalization layer: [batch, instance]
+        If nn alike: nn.BatchNorm2d, nn.InstanceNorm2d
+        If None: no batch norm
+    use_bias : bool, optional
+        Whether to add a learnable bias to the output, by default None
+
+    Returns
+    -------
+    norm_layer : nn alike
+        One of {nn.BatchNorm2d, nn.InstanceNorm2d}
+
+    Raises
+    ------
+    NotImplementedError
+        Raised when normalization is neither "batch" or "instance"
+
+    Notes
+    -----
     For BatchNorm: use learnable affine parameters. (affine=True)
                    track running statistics (mean/stddev). (track_running_stats=True)
                    do not use bias in previous convolution layer. (use_bias=False)
     For InstanceNorm: do not use learnable affine parameters. (affine=False)
                       do not track running statistics. (track_running_stats=False)
                       use bias in previous convolution layer. (use_bias=True)
-    Test commands:
-        get_norm_layer_and_bias('batch', None) -> affine=True, track_running_stats=True, False
-        get_norm_layer_and_bias('batch', True) -> affine=True, track_running_stats=True, True
-        get_norm_layer_and_bias('instance', None) -> affine=False, track_running_stats=False, True
-        get_norm_layer_and_bias('instance', False) -> affine=False, track_running_stats=False, False
-        get_norm_layer_and_bias(None, None) -> None, True
-        get_norm_layer_and_bias(None, False) -> None, False
-        get_norm_layer_and_bias(nn.BatchNorm2d, None) -> BatchNorm2d, False
-        get_norm_layer_and_bias(nn.BatchNorm2d, True) -> BatchNorm2d, True
-        get_norm_layer_and_bias(nn.InstanceNorm2d, None) -> InstanceNorm2d, True
-        get_norm_layer_and_bias(nn.InstanceNorm2d, False) -> InstanceNorm2d, False
+
+    Examples
+    --------
+    get_norm_layer_and_bias('batch', None) -> affine=True, track_running_stats=True, False
+    get_norm_layer_and_bias('batch', True) -> affine=True, track_running_stats=True, True
+    get_norm_layer_and_bias('instance', None) -> affine=False, track_running_stats=False, True
+    get_norm_layer_and_bias('instance', False) -> affine=False, track_running_stats=False, False
+    get_norm_layer_and_bias(None, None) -> None, True
+    get_norm_layer_and_bias(None, False) -> None, False
+    get_norm_layer_and_bias(nn.BatchNorm2d, None) -> BatchNorm2d, False
+    get_norm_layer_and_bias(nn.BatchNorm2d, True) -> BatchNorm2d, True
+    get_norm_layer_and_bias(nn.InstanceNorm2d, None) -> InstanceNorm2d, True
+    get_norm_layer_and_bias(nn.InstanceNorm2d, False) -> InstanceNorm2d, False
     """
     if isinstance(norm_layer, str):
         if norm_layer == 'batch':
