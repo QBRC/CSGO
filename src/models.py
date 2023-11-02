@@ -316,7 +316,6 @@ class CSGO():
   def segment(self, img_path, cell_size = 50, img_resolution=40):
     """Performs segmentation given an image path.
 
-
     Parameters
     ----------
     img_path : str
