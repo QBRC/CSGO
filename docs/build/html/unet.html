@@ -197,22 +197,78 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.Conv2d">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">Conv2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zeros'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.Conv2d" title="Link to this definition">#</a></dt>
-<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dd><p>Inherents the 2D convolution layer fron torch.nn.conv2d</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>in_channels<span class="classifier">int</span></dt><dd><p>Number of input channels</p>
+</dd>
+<dt>out_channels<span class="classifier">int</span></dt><dd><p>Number of channels produced by the convolution</p>
+</dd>
+<dt>kernel_size<span class="classifier">int</span></dt><dd><p>Size of the kernel matrix</p>
+</dd>
+<dt>stride<span class="classifier">int, optional</span></dt><dd><p>Size of stride - how far the filter moves in each step, by default 1</p>
+</dd>
+<dt>padding<span class="classifier">str or int, optional</span></dt><dd><p>Padding strategy, by default ‘default’</p>
+</dd>
+<dt>dilation<span class="classifier">int, optional</span></dt><dd><p>Spacing between kernel elements, by default 1</p>
+</dd>
+<dt>groups<span class="classifier">int, optional</span></dt><dd><p>Number of blocked connections from input channels to output channels, by default 1</p>
+</dd>
+<dt>bias<span class="classifier">bool, optional</span></dt><dd><p>Whether to add a learnable bias to the output, by default True</p>
+</dd>
+<dt>padding_mode<span class="classifier">str, optional</span></dt><dd><p>Padding method, by default ‘zeros’</p>
+</dd>
+<dt>device<span class="classifier">torch.device, optional</span></dt><dd><p>The PyTorch device destination , by default None</p>
+</dd>
+<dt>dtype<span class="classifier">ndarray.dtype</span></dt><dd><p>ndarray dtype, by default None</p>
+</dd>
+</dl>
+</section>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.Conv2dBNReLU">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">Conv2dBNReLU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'batch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ReLU(inplace=True)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.Conv2dBNReLU" title="Link to this definition">#</a></dt>
-<dd><p>Create a Conv2d-&gt;BN-&gt;ReLU layer. 
-norm_layer: batch, instance, None
-activation: a nn layer.
-padding:</p>
-<blockquote>
-<div><p>‘default’ (default): torch standard symmetric padding with (kernel_size - 1) // 2.
+<dd><p>Create2 a Conv2d-&gt;BN-&gt;ReLU layer.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>in_channels<span class="classifier">int</span></dt><dd><p>Number of input channels</p>
+</dd>
+<dt>out_channels<span class="classifier">int</span></dt><dd><p>Number of channels produced by the convolution</p>
+</dd>
+<dt>kernel_size<span class="classifier">int</span></dt><dd><p>Size of the kernel matrix</p>
+</dd>
+<dt>stride<span class="classifier">int, optional</span></dt><dd><p>Size of stride - how far the filter moves in each step, by default 1</p>
+</dd>
+<dt>padding<span class="classifier">str, optional</span></dt><dd><p>Padding strategy, by default ‘default’</p>
+</dd>
+<dt>dilation<span class="classifier">int, optional</span></dt><dd><p>Spacing between kernel elements, by default 1</p>
+</dd>
+<dt>groups<span class="classifier">int, optional</span></dt><dd><p>Number of blocked connections from input channels to output channels, by default 1</p>
+</dd>
+<dt>bias<span class="classifier">bool, optional</span></dt><dd><p>Whether to add a learnable bias to the output, by default None</p>
+</dd>
+<dt>norm_layer<span class="classifier">str, optional</span></dt><dd><p>Name of the normalization layers, by default ‘batch’</p>
+</dd>
+<dt>activation<span class="classifier">nn alike, optional</span></dt><dd><p>Activation function, by default nn.ReLU(inplace=True)</p>
+</dd>
+<dt>dropout_rate<span class="classifier">float, optional</span></dt><dd><p>Dropout rate, by default 0.0</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>padding: </dt><dd><p>‘default’ (default): torch standard symmetric padding with (kernel_size - 1) // 2.
 int: symmetric padding to pass to nn.Conv2d(padding=padding)
 “same”: tf padding=”same”, asymmetric for even kernel (l_0, r_1), etc)
 “valid”: tf padding=”valid”, same as padding=0</p>
-</div></blockquote>
+</dd>
+</dl>
+<p>For futher reference please consult nn.conv2d documentation: <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html">https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html</a></p>
+</section>
 </dd></dl>
 
 <dl class="py class">
@@ -224,10 +280,21 @@ int: symmetric padding to pass to nn.Conv2d(padding=padding)
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.IoU">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">IoU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'iou'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.IoU" title="Link to this definition">#</a></dt>
-<dd><p>Return a matrix of [batch * num_classes]. 
-Note: In order to separate from iou=0, function WILL return NaN if both 
-y_true and y_pred are 0. Need further treatment to remove nan in either 
-loss function or matrix.</p>
+<dd><p>Return a matrix of [batch * num_classes].</p>
+<section id="id2">
+<h2>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>mode<span class="classifier">str, optional</span></dt><dd><p>Evaluation metrics, by default ‘iou’. Options [‘iou’, ‘dice’]</p>
+</dd>
+<dt>axis<span class="classifier">int, optional</span></dt><dd><p>The direction to calculate IoU (row or column-wise), by default 1</p>
+</dd>
+<dt>eps<span class="classifier">float, optional</span></dt><dd><p>Used to prevent zero division error, by default 0.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h2>Notes<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>In order to separate from iou=0, function WILL return NaN if both y_true and y_pred are 0. Need further treatment to remove nan in either loss function or matrix.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="torch_models.IoU.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.IoU.forward" title="Link to this definition">#</a></dt>
@@ -242,6 +309,7 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 <dl class="py class">
@@ -254,10 +322,21 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.SoftDiceLoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">SoftDiceLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dice'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_positive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.SoftDiceLoss" title="Link to this definition">#</a></dt>
-<dd><p>Return a matrix of [batch * num_classes]. 
-Note: In order to separate from iou=0, function WILL return NaN if both 
-y_true and y_pred are 0. Need further treatment to remove nan in either 
-loss function or matrix.</p>
+<dd><p>Return a matrix of [batch * num_classes].</p>
+<section id="id4">
+<h2>Parameters<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>mode<span class="classifier">str, optional</span></dt><dd><p>Evaluation metrics, by default ‘iou’. Options [‘iou’, ‘dice’]</p>
+</dd>
+<dt>axis<span class="classifier">int, optional</span></dt><dd><p>The direction to calculate IoU (row or column-wise), by default 1</p>
+</dd>
+<dt>eps<span class="classifier">float, optional</span></dt><dd><p>Used to prevent zero division error, by default 0.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h2>Notes<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>In order to separate from iou=0, function WILL return NaN if both y_true and y_pred are 0. Need further treatment to remove nan in either loss function or matrix.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="torch_models.SoftDiceLoss.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.SoftDiceLoss.forward" title="Link to this definition">#</a></dt>
@@ -272,26 +351,18 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.SubPixelConv2d">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">SubPixelConv2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride=2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv=(&lt;class</span> <span class="pre">'torch_models.Conv2d'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">{'kernel_size':</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'padding':</span> <span class="pre">'default'})</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.SubPixelConv2d" title="Link to this definition">#</a></dt>
-<dd><p>Upsampling layer with better modelling power. 
-Sub-pixel convolution usually gives better result than resize convolution.
-Use incr init (and weight_norm) to avoid checkboard artifact. 
-<a class="reference external" href="https://arxiv.org/pdf/1707.02937.pdf">https://arxiv.org/pdf/1707.02937.pdf</a>
-May combine with (<a class="reference external" href="https://arxiv.org/pdf/1806.02658.pdf">https://arxiv.org/pdf/1806.02658.pdf</a>):</p>
-<blockquote>
-<div><dl class="simple">
-<dt>nn.Sequential(</dt><dd><p>nn.LeakyReLU(inplace=True),
-nn.ReplicationPad2d((1,0,1,0)),
-nn.AvgPool2d(2, stride=1),</p>
-</dd>
-</dl>
-<p>)</p>
-</div></blockquote>
-<p>to generate non-checkboard artifact image.</p>
+<dd><p>Upsampling layer with better modelling power.</p>
+<section id="id6">
+<h2>Notes<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<p>Sub-pixel convolution usually gives better result than resize convolution.
+Use incr init (and weight_norm) to avoid checkboard artifact, ref: <a class="reference external" href="https://arxiv.org/pdf/1707.02937.pdf">https://arxiv.org/pdf/1707.02937.pdf</a>
+May combine with (<a class="reference external" href="https://arxiv.org/pdf/1806.02658.pdf">https://arxiv.org/pdf/1806.02658.pdf</a>): nn.Sequential(nn.LeakyReLU(inplace=True), nn.ReplicationPad2d((1,0,1,0)), nn.AvgPool2d(2, stride=1)) to generate non-checkboard artifact image.</p>
 <p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="torch_models.SubPixelConv2d.icnr_">
@@ -299,17 +370,31 @@ nn.AvgPool2d(2, stride=1),</p>
 <dd><p>ICNR init of conv weight.</p>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.UNet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">UNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resize_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bilinear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_logits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.UNet" title="Link to this definition">#</a></dt>
-<dd><p>Abstract UNet class. 
-num_classes: num_classes in output layer.
-scale_factor: resize to original size.
-encoder: nn.Module or dictionary. (call UNetfeatures(<a href="#id1"><span class="problematic" id="id2">**</span></a>encoder)).
-decoder: nn.Module or dictionary. (call self.default_decoder(<a href="#id3"><span class="problematic" id="id4">**</span></a>decoder)).
-out_channels: call encoder.feature_channels() if None</p>
+<dd><p>Abstract UNet class.</p>
+<section id="id7">
+<h2>Parameters<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>num_classes<span class="classifier">int</span></dt><dd><p>Number of classes in the output layer</p>
+</dd>
+<dt>scale_factor<span class="classifier">int, optional</span></dt><dd><p>How much to rescale compared to the original size, by default 1</p>
+</dd>
+<dt>resize_mode<span class="classifier">str, optional</span></dt><dd><p>By default ‘bilinear’</p>
+</dd>
+<dt>encoder<span class="classifier">nn.Module or dictionary, optional</span></dt><dd><p>Calls UNetfeatures(**encoder)), by default {}</p>
+</dd>
+<dt>decoder<span class="classifier">nn.Module or dictionary, optional</span></dt><dd><p>Calls self.default_decoder(**decoder), by default {}</p>
+</dd>
+<dt>out_channels<span class="classifier">_type_, optional</span></dt><dd><p>Calls encoder.feature_channels(), by default None</p>
+</dd>
+<dt>return_logits<span class="classifier">bool, optional</span></dt><dd><p>Whether to return the logits from the layers, by default False</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torch_models.UNet.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.UNet.forward" title="Link to this definition">#</a></dt>
@@ -324,12 +409,40 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="torch_models.UNet.get_encoder">
+<span class="sig-name descname"><span class="pre">get_encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.UNet.get_encoder" title="Link to this definition">#</a></dt>
+<dd><p>Initializes class <cite>UNetFeatures</cite></p>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>UNetFeatures</dt><dd><p>Defining a part of the U-Net model</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="torch_models.UNetFeatures">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">UNetFeatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_downsampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'maxpool'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'batch'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.UNetFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dd><p>Initializes the U-Net encoder</p>
+<section id="id8">
+<h2>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>in_channels<span class="classifier">int, optional</span></dt><dd><p>Number of input channels, by default 3</p>
+</dd>
+<dt>n_channels<span class="classifier">int, optional</span></dt><dd><p>Number of channels produced by the convolution, by default 32</p>
+</dd>
+<dt>n_downsampling<span class="classifier">int, optional</span></dt><dd><p>Number of downsampling layers, by default 4</p>
+</dd>
+<dt>pool<span class="classifier">str, optional</span></dt><dd><p>Pooling strategy, by default ‘maxpool’</p>
+</dd>
+<dt>norm_layer<span class="classifier">str, optional</span></dt><dd><p>Name of the normalization layers, by default ‘batch’</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torch_models.UNetFeatures.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.UNetFeatures.forward" title="Link to this definition">#</a></dt>
@@ -344,26 +457,52 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="torch_models.get_norm_layer_and_bias">
 <span class="sig-prename descclassname"><span class="pre">torch_models.</span></span><span class="sig-name descname"><span class="pre">get_norm_layer_and_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norm_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'batch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torch_models.get_norm_layer_and_bias" title="Link to this definition">#</a></dt>
 <dd><p>Return a normalization layer and set up use_bias for convoluation layers.</p>
+<section id="id9">
+<h2>Parameters<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
 <dl class="simple">
-<dt>Parameters:</dt><dd><dl class="simple">
-<dt>norm_layer: (str) – the name of the normalization layer: [batch, instance]</dt><dd><p>None – no batch norm
-other module: nn.BatchNorm2d, nn.InstanceNorm2d</p>
+<dt>norm_layer<span class="classifier">str or nn alike, optional</span></dt><dd><p>If str, the name of the normalization layer: [batch, instance]
+If nn alike: nn.BatchNorm2d, nn.InstanceNorm2d
+If None: no batch norm</p>
+</dd>
+<dt>use_bias<span class="classifier">bool, optional</span></dt><dd><p>Whether to add a learnable bias to the output, by default None</p>
 </dd>
 </dl>
+</section>
+<section id="id10">
+<h2>Returns<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>norm_layer<span class="classifier">nn alike</span></dt><dd><p>One of {nn.BatchNorm2d, nn.InstanceNorm2d}</p>
 </dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>NotImplementedError</dt><dd><p>Raised when normalization is neither “batch” or “instance”</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h2>Notes<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<dl class="simple">
 <dt>For BatchNorm: use learnable affine parameters. (affine=True)</dt><dd><p>track running statistics (mean/stddev). (track_running_stats=True)
 do not use bias in previous convolution layer. (use_bias=False)</p>
 </dd>
 <dt>For InstanceNorm: do not use learnable affine parameters. (affine=False)</dt><dd><p>do not track running statistics. (track_running_stats=False)
 use bias in previous convolution layer. (use_bias=True)</p>
 </dd>
-<dt>Test commands:</dt><dd><p>get_norm_layer_and_bias(‘batch’, None) -&gt; affine=True, track_running_stats=True, False
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<p>get_norm_layer_and_bias(‘batch’, None) -&gt; affine=True, track_running_stats=True, False
 get_norm_layer_and_bias(‘batch’, True) -&gt; affine=True, track_running_stats=True, True
 get_norm_layer_and_bias(‘instance’, None) -&gt; affine=False, track_running_stats=False, True
 get_norm_layer_and_bias(‘instance’, False) -&gt; affine=False, track_running_stats=False, False
@@ -373,8 +512,7 @@ get_norm_layer_and_bias(nn.BatchNorm2d, None) -&gt; BatchNorm2d, False
 get_norm_layer_and_bias(nn.BatchNorm2d, True) -&gt; BatchNorm2d, True
 get_norm_layer_and_bias(nn.InstanceNorm2d, None) -&gt; InstanceNorm2d, True
 get_norm_layer_and_bias(nn.InstanceNorm2d, False) -&gt; InstanceNorm2d, False</p>
-</dd>
-</dl>
+</section>
 </dd></dl>
 
 </section>
@@ -445,6 +583,7 @@ get_norm_layer_and_bias(nn.InstanceNorm2d, False) -&gt; InstanceNorm2d, False</p
 </li>
 <li><a class="reference internal" href="#torch_models.UNet"><code class="docutils literal notranslate"><span class="pre">UNet</span></code></a><ul>
 <li><a class="reference internal" href="#torch_models.UNet.forward"><code class="docutils literal notranslate"><span class="pre">UNet.forward()</span></code></a></li>
+<li><a class="reference internal" href="#torch_models.UNet.get_encoder"><code class="docutils literal notranslate"><span class="pre">UNet.get_encoder()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#torch_models.UNetFeatures"><code class="docutils literal notranslate"><span class="pre">UNetFeatures</span></code></a><ul>

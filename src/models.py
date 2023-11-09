@@ -17,9 +17,8 @@ SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 
 class CSGO():
   def __init__(self, yolo_path=None, unet_path=None, gpu=False, save=False, output_dir=None, zoom=40, mpp=0.25):
-    """
-    Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
-
+    """Define high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
+    
     Parameters
     ----------
     yolo_path : str
@@ -56,8 +55,7 @@ class CSGO():
     self.unet_path = unet_path
 
   def convert_resolution_to_mpp(self, img_resolution=40):
-    """
-    Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). 
+    """Converts the solution (e.g. 20x, 40x) to microns per pixel (MPP). 
     
     Parameters
     ----------
@@ -85,14 +83,15 @@ class CSGO():
     return nuclei_pred, patch
 
   def to_device(self, x, device):
-    """ Move objects to device.
-        Option 2 and 3 not expected in this app.
-        1). if x.to(device) is valid, directly call it.
-        2). if x is a function, ignore it
-        3). if x is a dict, list, tuple of objects.
-            recursively send elements to device.
-        Function makes a copy of all non-gpu objects of x. 
-        It will skip objects already stored on gpu. 
+    """
+    Move objects to device.
+
+    Parameters
+    ----------
+    x : 
+        PyTorch componenets that can be directly called to load to device
+    device : torch.device
+        The PyTorch device destination 
     """
     return x.to(device)
   
@@ -111,12 +110,21 @@ class CSGO():
     self.model = model
 
   def predict_membrane_from_patch(self, img, patch_mpp=0.25, model_mpp=0.5):
-    """
-    Performs membrane segmentation after resizing the original image
-    @param img: the H&E stain image
-           patch_mpp: the MPP of the image. Used to calculate the model input size automatically.
+    """Helper function to perform membrane segmentation after resizing the original image
+    
+    Parameters
+    ----------
+    img : ndarray
+        The H&E stained image.
+    patch_mpp : float
+        The MPP of the image. This is used to calculate the model input size automatically.
+    model_mpp : float
+        The MPP of the model. The resolution of the images used to train the U-Net model
 
-    @return output: membrane prediction
+    Returns
+    -------
+    output : ndarray
+        Membrane predictions
     """
 
     # resizing image to desired dimension
@@ -171,23 +179,21 @@ class CSGO():
     return output
 
   def membrane_detection(self, patch, patch_mpp, model_mpp=0.5):
-    """
-    xxxDefine high-level attributes for CSGO (Cell Segmentation with Globally Optimized boundaries).
-
+    """Performs membrane prediction by first initialize the U-net, load the model weights, and evaluate the model.
+    
     Parameters
     ----------
-    patch : str
-        Path of the HD-Yolo model pretrained weight. HD-Yolo predicts nuclei
-    patch_mpp : str
-        Path of the U-Net model pretrained weight. U-Net predicts membrane
-    model_mpp : int, default 0.5
-        Whether to use GPU to evaluate the models
+    patch : ndarray
+        The H&E stained image.
+    patch_mpp : float
+        The MPP of the image. This is used to calculate the model input size automatically.
+    model_mpp : float
+        The MPP of the model. The resolution of the images used to train the U-Net model
 
-    Notes
-    -----
-    If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
-    
-    Standard imaging equipment places 40x zoomed images at MPP = 0.25
+    Returns
+    -------
+    membrane_mask : ndarray
+        Membrane predictions
     """
     # add a class attribute model
     self.unet_init()
@@ -199,58 +205,78 @@ class CSGO():
     return membrane_mask
 
   def find_missed_nuclei(self, ndi_distance, nucleus_label, cell_size):
-      """
-      Given transformed distance from ndi, find the local minima and mark them as new nucleus
-      @param ndi_distance: topology map of membrane and nucleus computed from ndi.distance_transform_edt()
-            nucleus_label: nucleus prediction results from HD-Staining
-            cell_size: the average diameter of the cell. Used to calculate minimum separation between two nucleus, and the size of the artifical nucleus
-                for minimum searation, it is used in 1)peak_local_max(), and 2)the local minima will be only be a new nucleus if at least this disntance away from HD-Staining label
+    """Given transformed distance from ndi, find the local minima and mark them as new nucleus.
+    
+    Parameters
+    ---------- 
+    ndi_distance : int 
+        topology map of membrane and nucleus computed from ndi.distance_transform_edt()
+    nucleus_label : ndarray 
+        nucleus prediction results from HD-Staining
+    cell_size: 
+        the average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus. 
       
-      @return nucleus_label: nucleus labels found by both HD-Staining and minimum local distances
-      """
+    Returns
+    -------
+        nucleus_label: nucleus labels found by both HD-Staining and minimum local distances.
+    """
 
-      # determines minimum separation
-      min_nucleus_distance = int(cell_size/2)
-      
-      # negative here to find the maximum
-      # ref: https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.peak_local_max
-      local_min = skimage.feature.peak_local_max(-ndi_distance, min_distance=min_nucleus_distance, exclude_border=False)
+    # determines minimum separation
+    min_nucleus_distance = int(cell_size/2)
+    
+    # negative here to find the maximum
+    # ref: https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.peak_local_max
+    local_min = skimage.feature.peak_local_max(-ndi_distance, min_distance=min_nucleus_distance, exclude_border=False)
 
-      # preserve the shape as HD-Staining predicted nucleus
-      local_min_mask = np.zeros(nucleus_label.shape, dtype=bool)
+    # preserve the shape as HD-Staining predicted nucleus
+    local_min_mask = np.zeros(nucleus_label.shape, dtype=bool)
 
-      # Set the elements corresponding to the coordinates in `local_min` to True
-      local_min_mask[local_min[:, 0], local_min[:, 1]] = True
+    # Set the elements corresponding to the coordinates in `local_min` to True
+    local_min_mask[local_min[:, 0], local_min[:, 1]] = True
 
-      # local_min_mask_dilated = skimage.morphology.binary_dilation(local_min_mask, skimage.morphology.disk(60))
-      local_min_mask_labeled = skimage.measure.label(local_min_mask)
+    # local_min_mask_dilated = skimage.morphology.binary_dilation(local_min_mask, skimage.morphology.disk(60))
+    local_min_mask_labeled = skimage.measure.label(local_min_mask)
 
-      artifical_nucleus_size = int(cell_size / 3)
+    artifical_nucleus_size = int(cell_size / 3)
 
-      for label in np.unique(local_min_mask_labeled):
-        if label == 0: continue # skip the background
+    for label in np.unique(local_min_mask_labeled):
+      if label == 0: continue # skip the background
 
-        # build individually labeled minima masks
-        ind_minima_labeled = local_min_mask_labeled == label
+      # build individually labeled minima masks
+      ind_minima_labeled = local_min_mask_labeled == label
 
-        # calculate the Euclidean distance between each pixel in the image (i.e. HD-Staining nucelus prediction) and each pixel in the label
-        # label in this case only has True or False
-        distances = cdist(np.argwhere(nucleus_label), np.argwhere(ind_minima_labeled))
+      # calculate the Euclidean distance between each pixel in the image (i.e. HD-Staining nucelus prediction) and each pixel in the label
+      # label in this case only has True or False
+      distances = cdist(np.argwhere(nucleus_label), np.argwhere(ind_minima_labeled))
 
-        # the closest other nucleus is too far to be within the same cell
-        # distance between two local minima is not checked, as it was filtered in peak_local_max()
-        if np.min(distances) >= min_nucleus_distance:
-          # add to nuc_zero label as a new nuclei
-          # idea: average nucleus size in each predicted labels
-          ind_nuclei = skimage.morphology.binary_dilation(ind_minima_labeled, skimage.morphology.disk(artifical_nucleus_size))
-          nucleus_label[(nucleus_label == 0) & (ind_nuclei == 1)] = np.unique(nucleus_label)[-1] + 1 # mark the membrane as another color on "nucleus" labels
+      # the closest other nucleus is too far to be within the same cell
+      # distance between two local minima is not checked, as it was filtered in peak_local_max()
+      if np.min(distances) >= min_nucleus_distance:
+        # add to nuc_zero label as a new nuclei
+        # idea: average nucleus size in each predicted labels
+        ind_nuclei = skimage.morphology.binary_dilation(ind_minima_labeled, skimage.morphology.disk(artifical_nucleus_size))
+        nucleus_label[(nucleus_label == 0) & (ind_nuclei == 1)] = np.unique(nucleus_label)[-1] + 1 # mark the membrane as another color on "nucleus" labels
 
-      return nucleus_label
+    return nucleus_label
   
   def watershed(self, nuclei_mask, membrane_mask, cell_size):
+    """Performs energy-based watershed given nuclei and membrane masks
+
+    Parameters
+    ----------
+    nuclei_mask : ndarray
+        Basin of the watershed from the segmentation result of HD-yolo. Each pixel is assigned either a nuclei group number (1 to len(nuclei)), or background (0)
+    membrane_mask : ndarray
+        Boundary of the watershed from the segmentation result of U-Net, generated from self.membrane_detection()
+    cell_size : int
+        The average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus. 
+
+    Returns
+    -------
+    watershed_res : ndarray
+        Result of watershed. Each pixel is assigned to a cell number. No pixel will be assigned as background. 
     """
-    performs watershed using predicted nucleus (HD-Yolo) and membranes (UNet).
-    """
+
 
     # negative membrane for distrance transform
     new_mm  = 1-membrane_mask/255
@@ -288,8 +314,25 @@ class CSGO():
 
 
   def segment(self, img_path, cell_size = 50, img_resolution=40):
-    """
-    Performs segmentation given an image path.
+    """Performs segmentation given an image path.
+
+    Parameters
+    ----------
+    img_path : str
+        The path of the image
+    cell_size : int, optional
+        The average diameter of the cell. Used to 1) calculate minimum separation between two nucleus, and 2) the size of the artifical nucleus, by default 50
+    img_resolution : int, optional
+        The resolution of the incoming patch, by default 40
+
+    Returns
+    -------
+    res_cell_seg : ndarray
+        An numpy.ndarray with the original image shape. Each pixel is assigned to a cell number. No pixel will be assigned as background. 
+    
+    Notes
+    -----
+    If `save` is enabled, 1) the cell segmentation result, where each pixel is assigned to a cell, and 2) an image showing the process CSGO will be written to `output_dir`.
     """
     ## Nuclei segmentation with HD-Yolo ##
     patch_mpp = self.convert_resolution_to_mpp(img_resolution)
@@ -331,36 +374,35 @@ class CSGO():
 
     return res_cell_seg
 
-
-    
-
       
 def main():
-    parser = argparse.ArgumentParser('Whole-cell segmentation with CSGO.', add_help=True)
-    
-    # app/model args
-    parser.add_argument('--data_path', required=True, type=str, help="Input data filename.")
-    parser.add_argument('--yolo_path', default='pretrained_weights/lung_best.float16.torchscript.pt', type=str, help="HD-Yolo model path, torch jit model." )
-    parser.add_argument('--unet_path', default='pretrained_weights/epoch_190.pt', type=str, help="UNet model path, torch jit model." )
-    parser.add_argument('--output_dir', default='patch_results', type=str, help="Output folder.")
-    parser.add_argument('--save', default=True, type=bool, help='Option to save the model outputs')
-    
-    # patch args
-    parser.add_argument('--gpu', default=False, type=bool, help='Boolean. Run on gpu if true else on cpu.')
-    parser.add_argument('--zoom_for_mpp', default=40, type=int, help='Zoom: 1st data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment specific.')
-    parser.add_argument('--mpp_for_zoom', default=0.25, type=float, help='MPP: 2nd data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment specific')
-    parser.add_argument('--resolution', default=40, type=float, help='Input patch resolutio.')
-    parser.add_argument('--cell_size', default=50, type=int, help='Default cell size (diameter), measured in pixels.')
-       
-    args = parser.parse_args()
+  """Parses arguments from commandline, creates `output_dir` if needed, and performs whole-cell segmentation
+  """
+  parser = argparse.ArgumentParser('Whole-cell segmentation with CSGO.', add_help=True)
+  
+  # app/model args
+  parser.add_argument('--data_path', required=True, type=str, help="Input data filename.")
+  parser.add_argument('--yolo_path', default='pretrained_weights/lung_best.float16.torchscript.pt', type=str, help="HD-Yolo model path, torch jit model." )
+  parser.add_argument('--unet_path', default='pretrained_weights/epoch_190.pt', type=str, help="UNet model path, torch jit model." )
+  parser.add_argument('--output_dir', default='patch_results', type=str, help="Output folder.")
+  parser.add_argument('--save', default=True, type=bool, help='Option to save the model outputs')
+  
+  # patch args
+  parser.add_argument('--gpu', default=False, type=bool, help='Boolean. Run on gpu if true else on cpu.')
+  parser.add_argument('--zoom_for_mpp', default=40, type=int, help='Zoom: 1st data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment specific.')
+  parser.add_argument('--mpp_for_zoom', default=0.25, type=float, help='MPP: 2nd data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment specific')
+  parser.add_argument('--resolution', default=40, type=float, help='Input patch resolutio.')
+  parser.add_argument('--cell_size', default=50, type=int, help='Default cell size (diameter), measured in pixels.')
+  
+  args = parser.parse_args()
 
-    # initialize
-    if not os.path.exists(args.output_dir):
-      os.makedirs(args.output_dir)
+  # initialize
+  if not os.path.exists(args.output_dir):
+    os.makedirs(args.output_dir)
 
-    # perform segmentation and save
-    cell_seg_go = CSGO(yolo_path=args.yolo_path, unet_path=args.unet_path, gpu=args.gpu, save=args.save, output_dir=args.output_dir, zoom=args.zoom_for_mpp, mpp=args.mpp_for_zoom)
-    cell_seg_go.segment(args.data_path, args.cell_size, args.resolution)
+  # perform segmentation and save
+  cell_seg_go = CSGO(yolo_path=args.yolo_path, unet_path=args.unet_path, gpu=args.gpu, save=args.save, output_dir=args.output_dir, zoom=args.zoom_for_mpp, mpp=args.mpp_for_zoom)
+  cell_seg_go.segment(args.data_path, args.cell_size, args.resolution)
 
 
 if __name__ == '__main__':
