@@ -79,5 +79,4 @@ optional arguments:
 
 
 ## How to use CSGO in Jupyter Notebooks
-
-TBD.
+Please find a notebook tutorial of running CSGO with example images here: [csgo_tutorial.ipynb](notebooks/csgo_tutorial.ipynb).
