@@ -2,7 +2,7 @@ name: Python Package using Conda
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
     branches: [ "main" ]
 
@@ -19,10 +19,10 @@ jobs:
       with:
         python-version: '3.8'
 
-    # - name: Set up Conda
-    #   uses: conda-incubator/setup-miniconda@v2
-    #   with:
-    #     conda-version: '23.9.0'
+    - name: Set up Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        conda-version: '23.7.2'
 
     - name: Add conda to system path
       run: |
