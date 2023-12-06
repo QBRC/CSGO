@@ -1,8 +1,9 @@
 # CSGO
-Cell Segmentation with Globally Optimized boundaries
 
 ## Introduction
-TBD
+Cell Segmentation with Globally Optimized boundaries (CSGO) is a whole-cell segmentation pipeline tailored specifically to the H&E domain. CSGO brings four notable contributions: 1) a U-Net algorithm to detect cell membranes with various intensities, 2) integration of HD-Yolo nuclei detection with the U-Net membrane detection, 3) superior performance and robustness: CSGO consistently outperforms the state-of-the-art cell segmentation algorithm across a range of cancer types, all while requiring fewer manual annotations. Furthermore, our pipeline demonstrates remarkable robustness even in scenarios with significant variations in individual cell sizes.
+
+If you would like to try CSGO without going through the installation process below, a web application is available at https://ai.swmed.edu/projects/csgo/index.php
 
 ## Citation
 If you used the tools within this repository, please cite us at:
@@ -78,5 +79,4 @@ optional arguments:
 
 
 ## How to use CSGO in Jupyter Notebooks
-
-TBD.
+Please find a notebook tutorial of running CSGO with example images here: [csgo_tutorial.ipynb](notebooks/csgo_tutorial.ipynb).
