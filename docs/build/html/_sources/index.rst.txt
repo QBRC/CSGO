@@ -8,7 +8,8 @@ Welcome to CSGO's documentation!
 
 .. note::
 
-   This project is under active development.
+   This is the source code documentation page. Looking for a quick start guide? Please visit https://github.com/QBRC/CSGO.
+   
 
 .. toctree::
    :maxdepth: 3
@@ -18,8 +19,7 @@ Welcome to CSGO's documentation!
 
 Introduction
 ==================
-
-Add CSGO Introduction here.
+Cell Segmentation with Globally Optimized boundaries (CSGO) is a whole-cell segmentation pipeline tailored specifically to the H&E domain. There are three main classes used in this pipeline - `CSGO`, `HD-Yolo`, and `UNet`. The detailed function documentation is listed below.
 
 
 Contents
