@@ -1,14 +1,14 @@
 import sys
-sys.path.append('hd_wsi/')
+import os
+
+# find the path this file
+SRC_DIR = os.path.realpath(os.path.dirname(__file__))
+sys.path.append(os.path.join(SRC_DIR, 'hd_wsi/'))
 
 from hd_wsi import run_patch_inference
 from run_patch_inference import main
 import argparse
 
-import os
-
-# find the path this file
-SRC_DIR = os.path.realpath(os.path.dirname(__file__))
 
 class yoloStandalone():
   def __init__(self, img_path, device, mpp, model_path=None):
