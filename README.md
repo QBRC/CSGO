@@ -72,7 +72,7 @@ optional arguments:
                         MPP: 2nd data point to convert resolution and mpp. Standard is 40x at 0.25mpp. This is microscope/equipment
                         specific
   --resolution RESOLUTION
-                        Input patch resolutio.
+                        Input patch resolution.
   --cell_size CELL_SIZE
                         Default cell size (diameter), measured in pixels.
 ```
