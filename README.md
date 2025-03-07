@@ -7,7 +7,8 @@ If you would like to try CSGO without going through the installation process bel
 
 ## Citation
 If you used the tools within this repository, please cite us at:
-TBD
+
+Gu, Z., Wang, S., Rong, R., Zhao, Z., Wu, F., Zhou, Q., ... & Xiao, G. (2025). Cell Segmentation With Globally Optimized Boundaries (CSGO): A Deep Learning Pipeline for Whole-Cell Segmentation in Hematoxylin-and-Eosin–Stained Tissues. Laboratory Investigation, 105(2), 102184.
 
 ## Install package Using Conda
 
